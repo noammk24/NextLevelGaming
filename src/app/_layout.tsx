@@ -7,6 +7,7 @@ export default function RootLayout() {
       <Stack.Screen name="about" />
       <Stack.Screen name="overview" />
       <Stack.Screen name="calculate-fees" />
+      <Stack.Screen name="contact" />
     </Stack>
   );
 }
