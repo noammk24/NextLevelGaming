@@ -8,14 +8,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-
-const COLORS = {
-  blue: '#170398',
-  green: '#5ACF29',
-  cyan: '#0499B1',
-  grey: '#D9D9D9',
-  white: '#FFFFFF',
-};
+import PackageCard from '../constants/PackageCard';
+import { COLORS } from '../constants/theme';
 
 type PackageItem = {
   title: string;
@@ -159,30 +153,6 @@ export default function HomeScreen() {
         </View>
       </ScrollView>
     </SafeAreaView>
-  );
-}
-
-/* Reusable package card */
-function PackageCard({ title, price }: PackageItem) {
-  return (
-    <View style={styles.card}>
-      <View style={styles.imagePlaceholder}>
-        <Text style={styles.imageText}>GAMING</Text>
-      </View>
-
-      <Text style={styles.cardTitle}>{title}</Text>
-
-      <Text style={styles.cardPrice}>{price}</Text>
-
-      <TouchableOpacity
-        style={styles.smallButton}
-        onPress={() => router.push('/overview')}
-      >
-        <Text style={styles.smallButtonText}>
-          VIEW DETAILS
-        </Text>
-      </TouchableOpacity>
-    </View>
   );
 }
 
