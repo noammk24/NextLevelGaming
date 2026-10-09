@@ -51,57 +51,72 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header area with the brand identity. */}
+        {/* Header */}
         <View style={styles.header}>
           <View style={styles.logoPlaceholder}>
             <Text style={styles.logoText}>NL</Text>
           </View>
 
-          <Text style={styles.brandName}>NEXT LEVEL</Text>
+          <View>
+            <Text style={styles.brandName}>NEXT LEVEL</Text>
+            <Text style={styles.brandSubtitle}>
+              GAMING & ESPORTS ARENA
+            </Text>
+          </View>
         </View>
 
-        {/* Hero section for the main message and key actions. */}
+        {/* Hero Section */}
         <View style={styles.hero}>
-          <Text style={styles.heroTitle}>LEVEL UP{'\n'}YOUR GAME</Text>
+          <Text style={styles.heroTitle}>
+            LEVEL UP{'\n'}YOUR GAME
+          </Text>
 
           <Text style={styles.heroText}>
-            Experience gaming, esports and unforgettable entertainment at Next Level
-            Gaming & Esports Arena.
+            Experience gaming, esports and unforgettable entertainment
+            at Next Level Gaming & Esports Arena.
           </Text>
 
           <TouchableOpacity
             style={styles.primaryButton}
             onPress={() => router.push('/overview')}
           >
-            <Text style={styles.primaryButtonText}>EXPLORE EXPERIENCES</Text>
+            <Text style={styles.primaryButtonText}>
+              EXPLORE EXPERIENCES
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.secondaryButton}
             onPress={() => router.push('/about')}
           >
-            <Text style={styles.secondaryButtonText}>ABOUT US</Text>
+            <Text style={styles.secondaryButtonText}>
+              ABOUT US
+            </Text>
           </TouchableOpacity>
         </View>
 
-        {/* Intro block explaining the arena's audience and purpose. */}
+        {/* Introduction */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>NEXT LEVEL GAMING</Text>
+          <Text style={styles.sectionTitle}>
+            NEXT LEVEL GAMING
+          </Text>
 
           <Text style={styles.sectionText}>
-            A modern gaming and esports arena designed for gamers, families,
-            schools, gaming clubs and businesses.
+            A modern gaming and esports arena designed for gamers,
+            families, schools, gaming clubs and businesses.
           </Text>
         </View>
 
-        {/* Shared package sections are mapped from data for a cleaner layout. */}
+        {/* Gaming Packages and Individual Experiences */}
         {PACKAGE_SECTIONS.map((section) => (
           <View key={section.title} style={styles.section}>
-            <Text style={styles.sectionTitle}>{section.title}</Text>
+            <Text style={styles.sectionTitle}>
+              {section.title}
+            </Text>
 
             {section.items.map((item) => (
               <PackageCard
-                key={`${section.title}-${item.title}`}
+                key={item.title}
                 title={item.title}
                 price={item.price}
               />
@@ -109,15 +124,37 @@ export default function HomeScreen() {
           </View>
         ))}
 
-        {/* Closing call to action to encourage conversions. */}
+        {/* Main Actions */}
         <View style={styles.cta}>
-          <Text style={styles.ctaTitle}>READY TO LEVEL UP?</Text>
+          <Text style={styles.ctaTitle}>
+            READY TO LEVEL UP?
+          </Text>
 
           <TouchableOpacity
             style={styles.primaryButton}
             onPress={() => router.push('/overview')}
           >
-            <Text style={styles.primaryButtonText}>VIEW PACKAGES</Text>
+            <Text style={styles.primaryButtonText}>
+              VIEW PACKAGES
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.secondaryButton}
+            onPress={() => router.push('/calculate-fees')}
+          >
+            <Text style={styles.secondaryButtonText}>
+              CALCULATE FEES
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.contactButton}
+            onPress={() => router.push('/contact')}
+          >
+            <Text style={styles.contactButtonText}>
+              CONTACT US
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -125,6 +162,7 @@ export default function HomeScreen() {
   );
 }
 
+/* Reusable package card */
 function PackageCard({ title, price }: PackageItem) {
   return (
     <View style={styles.card}>
@@ -133,13 +171,16 @@ function PackageCard({ title, price }: PackageItem) {
       </View>
 
       <Text style={styles.cardTitle}>{title}</Text>
+
       <Text style={styles.cardPrice}>{price}</Text>
 
       <TouchableOpacity
         style={styles.smallButton}
         onPress={() => router.push('/overview')}
       >
-        <Text style={styles.smallButtonText}>VIEW DETAILS</Text>
+        <Text style={styles.smallButtonText}>
+          VIEW DETAILS
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -152,11 +193,12 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    height: 70,
+    minHeight: 75,
     backgroundColor: COLORS.blue,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
+    paddingVertical: 10,
   },
 
   logoPlaceholder: {
@@ -181,17 +223,23 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
 
+  brandSubtitle: {
+    color: COLORS.grey,
+    fontSize: 10,
+    marginTop: 3,
+  },
+
   hero: {
     backgroundColor: COLORS.blue,
     paddingHorizontal: 24,
-    paddingVertical: 50,
+    paddingVertical: 45,
   },
 
   heroTitle: {
     color: COLORS.white,
     fontSize: 38,
     fontWeight: '900',
-    lineHeight: 42,
+    lineHeight: 43,
     marginBottom: 18,
   },
 
@@ -199,13 +247,13 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 16,
     lineHeight: 24,
-    marginBottom: 28,
+    marginBottom: 25,
   },
 
   primaryButton: {
     backgroundColor: COLORS.green,
     paddingVertical: 15,
-    paddingHorizontal: 22,
+    paddingHorizontal: 18,
     borderRadius: 12,
     alignItems: 'center',
     marginBottom: 12,
@@ -215,12 +263,13 @@ const styles = StyleSheet.create({
     color: COLORS.blue,
     fontSize: 14,
     fontWeight: '900',
+    textAlign: 'center',
   },
 
   secondaryButton: {
     backgroundColor: COLORS.white,
     paddingVertical: 15,
-    paddingHorizontal: 22,
+    paddingHorizontal: 18,
     borderRadius: 12,
     alignItems: 'center',
   },
@@ -233,21 +282,20 @@ const styles = StyleSheet.create({
 
   section: {
     paddingHorizontal: 20,
-    paddingVertical: 28,
+    paddingVertical: 25,
   },
 
   sectionTitle: {
     color: COLORS.blue,
-    fontSize: 23,
+    fontSize: 22,
     fontWeight: '900',
-    marginBottom: 12,
+    marginBottom: 14,
   },
 
   sectionText: {
     color: '#333333',
     fontSize: 16,
     lineHeight: 24,
-    marginBottom: 10,
   },
 
   card: {
@@ -255,10 +303,12 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginBottom: 18,
     padding: 14,
+    borderWidth: 1,
+    borderColor: '#EEEEEE',
   },
 
   imagePlaceholder: {
-    height: 150,
+    height: 145,
     borderRadius: 12,
     backgroundColor: COLORS.cyan,
     justifyContent: 'center',
@@ -280,7 +330,7 @@ const styles = StyleSheet.create({
   },
 
   cardPrice: {
-    color: COLORS.green,
+    color: COLORS.blue,
     fontSize: 20,
     fontWeight: '900',
     marginBottom: 12,
@@ -302,17 +352,31 @@ const styles = StyleSheet.create({
   cta: {
     backgroundColor: COLORS.cyan,
     margin: 20,
-    padding: 28,
+    padding: 24,
     borderRadius: 18,
-    alignItems: 'center',
     marginBottom: 40,
   },
 
   ctaTitle: {
     color: COLORS.white,
-    fontSize: 25,
+    fontSize: 24,
     fontWeight: '900',
     marginBottom: 20,
     textAlign: 'center',
+  },
+
+  contactButton: {
+    borderWidth: 2,
+    borderColor: COLORS.white,
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 12,
+  },
+
+  contactButtonText: {
+    color: COLORS.white,
+    fontSize: 14,
+    fontWeight: '900',
   },
 });
