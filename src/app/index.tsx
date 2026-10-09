@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -18,132 +17,115 @@ const COLORS = {
   white: '#FFFFFF',
 };
 
+type PackageItem = {
+  title: string;
+  price: string;
+};
+
+type PackageSection = {
+  title: string;
+  items: PackageItem[];
+};
+
+const PACKAGE_SECTIONS: PackageSection[] = [
+  {
+    title: 'GAMING PACKAGES',
+    items: [
+      { title: 'Ultimate Gamer Pass', price: 'R1,500' },
+      { title: 'VIP Gaming Experience', price: 'R1,500' },
+      { title: 'Esports Training Package', price: 'R1,500' },
+      { title: 'Birthday Party Package', price: 'R1,500' },
+    ],
+  },
+  {
+    title: 'INDIVIDUAL EXPERIENCES',
+    items: [
+      { title: 'Virtual Reality Experience', price: 'R750' },
+      { title: 'Racing Simulator Challenge', price: 'R750' },
+      { title: 'Escape Room Challenge', price: 'R750' },
+    ],
+  },
+];
+
 export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        
-        {/* Header */}
+        {/* Header area with the brand identity. */}
         <View style={styles.header}>
           <View style={styles.logoPlaceholder}>
             <Text style={styles.logoText}>NL</Text>
           </View>
 
-          <Text style={styles.brandName}>
-            NEXT LEVEL
-          </Text>
+          <Text style={styles.brandName}>NEXT LEVEL</Text>
         </View>
 
-        {/* Hero */}
+        {/* Hero section for the main message and key actions. */}
         <View style={styles.hero}>
-          <Text style={styles.heroTitle}>
-            LEVEL UP{'\n'}YOUR GAME
-          </Text>
+          <Text style={styles.heroTitle}>LEVEL UP{'\n'}YOUR GAME</Text>
 
           <Text style={styles.heroText}>
-            Experience gaming, esports and unforgettable
-            entertainment at Next Level Gaming & Esports Arena.
+            Experience gaming, esports and unforgettable entertainment at Next Level
+            Gaming & Esports Arena.
           </Text>
 
           <TouchableOpacity
             style={styles.primaryButton}
             onPress={() => router.push('/overview')}
           >
-            <Text style={styles.primaryButtonText}>
-              EXPLORE EXPERIENCES
-            </Text>
+            <Text style={styles.primaryButtonText}>EXPLORE EXPERIENCES</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.secondaryButton}
+            onPress={() => router.push('/about')}
+          >
+            <Text style={styles.secondaryButtonText}>ABOUT US</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Welcome */}
+        {/* Intro block explaining the arena's audience and purpose. */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            NEXT LEVEL GAMING
-          </Text>
+          <Text style={styles.sectionTitle}>NEXT LEVEL GAMING</Text>
 
           <Text style={styles.sectionText}>
-            A modern gaming and esports arena designed for
-            gamers, families, schools, gaming clubs and businesses.
+            A modern gaming and esports arena designed for gamers, families,
+            schools, gaming clubs and businesses.
           </Text>
         </View>
 
-        {/* Packages */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            GAMING PACKAGES
-          </Text>
+        {/* Shared package sections are mapped from data for a cleaner layout. */}
+        {PACKAGE_SECTIONS.map((section) => (
+          <View key={section.title} style={styles.section}>
+            <Text style={styles.sectionTitle}>{section.title}</Text>
 
-          <PackageCard
-            title="Ultimate Gamer Pass"
-            price="R1,500"
-          />
+            {section.items.map((item) => (
+              <PackageCard
+                key={`${section.title}-${item.title}`}
+                title={item.title}
+                price={item.price}
+              />
+            ))}
+          </View>
+        ))}
 
-          <PackageCard
-            title="VIP Gaming Experience"
-            price="R1,500"
-          />
-
-          <PackageCard
-            title="Esports Training Package"
-            price="R1,500"
-          />
-
-          <PackageCard
-            title="Birthday Party Package"
-            price="R1,500"
-          />
-        </View>
-
-        {/* Experiences */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            INDIVIDUAL EXPERIENCES
-          </Text>
-
-          <PackageCard
-            title="Virtual Reality Experience"
-            price="R750"
-          />
-
-          <PackageCard
-            title="Racing Simulator Challenge"
-            price="R750"
-          />
-
-          <PackageCard
-            title="Escape Room Challenge"
-            price="R750"
-          />
-        </View>
-
-        {/* CTA */}
+        {/* Closing call to action to encourage conversions. */}
         <View style={styles.cta}>
-          <Text style={styles.ctaTitle}>
-            READY TO LEVEL UP?
-          </Text>
+          <Text style={styles.ctaTitle}>READY TO LEVEL UP?</Text>
 
           <TouchableOpacity
             style={styles.primaryButton}
             onPress={() => router.push('/overview')}
           >
-            <Text style={styles.primaryButtonText}>
-              VIEW PACKAGES
-            </Text>
+            <Text style={styles.primaryButtonText}>VIEW PACKAGES</Text>
           </TouchableOpacity>
         </View>
-
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-function PackageCard({
-  title,
-  price,
-}: {
-  title: string;
-  price: string;
-}) {
+function PackageCard({ title, price }: PackageItem) {
   return (
     <View style={styles.card}>
       <View style={styles.imagePlaceholder}>
@@ -151,16 +133,13 @@ function PackageCard({
       </View>
 
       <Text style={styles.cardTitle}>{title}</Text>
-
       <Text style={styles.cardPrice}>{price}</Text>
 
       <TouchableOpacity
         style={styles.smallButton}
         onPress={() => router.push('/overview')}
       >
-        <Text style={styles.smallButtonText}>
-          VIEW DETAILS
-        </Text>
+        <Text style={styles.smallButtonText}>VIEW DETAILS</Text>
       </TouchableOpacity>
     </View>
   );
@@ -229,9 +208,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     borderRadius: 12,
     alignItems: 'center',
+    marginBottom: 12,
   },
 
   primaryButtonText: {
+    color: COLORS.blue,
+    fontSize: 14,
+    fontWeight: '900',
+  },
+
+  secondaryButton: {
+    backgroundColor: COLORS.white,
+    paddingVertical: 15,
+    paddingHorizontal: 22,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+
+  secondaryButtonText: {
     color: COLORS.blue,
     fontSize: 14,
     fontWeight: '900',

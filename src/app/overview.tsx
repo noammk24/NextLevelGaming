@@ -8,14 +8,14 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 
-const packages = [
+const PACKAGES = [
   'Ultimate Gamer Pass',
   'VIP Gaming Experience',
   'Esports Training Package',
   'Birthday Party Package',
 ];
 
-const experiences = [
+const EXPERIENCES = [
   'Virtual Reality Experience',
   'Racing Simulator Challenge',
   'Escape Room Challenge',
@@ -24,36 +24,32 @@ const experiences = [
 export default function OverviewScreen() {
   return (
     <ScrollView style={styles.container}>
-      {/* Header */}
+      {/* Brand header with logo and arena name. */}
       <View style={styles.header}>
         <Text style={styles.logo}>NL</Text>
 
         <View>
           <Text style={styles.brand}>NEXT LEVEL</Text>
-          <Text style={styles.subtitle}>
-            GAMING & ESPORTS ARENA
-          </Text>
+          <Text style={styles.subtitle}>GAMING & ESPORTS ARENA</Text>
         </View>
       </View>
 
-      {/* Hero */}
+      {/* Hero banner introducing the experience catalog. */}
       <View style={styles.hero}>
         <Text style={styles.heroTitle}>EXPLORE</Text>
-        <Text style={styles.heroSubtitle}>
-          OUR GAMING EXPERIENCES
-        </Text>
+        <Text style={styles.heroSubtitle}>OUR GAMING EXPERIENCES</Text>
       </View>
 
-      {/* Gaming Packages */}
+      {/* Gaming package list arranged for quick browsing. */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>GAMING PACKAGES</Text>
 
         <Text style={styles.description}>
-          Choose from our range of gaming packages designed for
-          gamers, groups and special events.
+          Choose from our range of gaming packages designed for gamers, groups and
+          special events.
         </Text>
 
-        {packages.map((item, index) => (
+        {PACKAGES.map((item, index) => (
           <View style={styles.card} key={item}>
             <View style={styles.number}>
               <Text style={styles.numberText}>{index + 1}</Text>
@@ -65,63 +61,55 @@ export default function OverviewScreen() {
 
               <TouchableOpacity
                 style={styles.smallButton}
-                onPress={() => router.push('/package-details')}
+                onPress={() => router.push('/explore')}
               >
-                <Text style={styles.smallButtonText}>
-                  VIEW DETAILS
-                </Text>
+                <Text style={styles.smallButtonText}>VIEW DETAILS</Text>
               </TouchableOpacity>
             </View>
           </View>
         ))}
       </View>
 
-      {/* Individual Experiences */}
+      {/* Individual experiences section for standalone activities. */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>
-          INDIVIDUAL EXPERIENCES
-        </Text>
+        <Text style={styles.sectionTitle}>INDIVIDUAL EXPERIENCES</Text>
 
         <Text style={styles.description}>
-          Try one of our exciting individual gaming and
-          entertainment experiences.
+          Try one of our exciting individual gaming and entertainment experiences.
         </Text>
 
-        {experiences.map((item, index) => (
+        {EXPERIENCES.map((item) => (
           <View style={styles.experienceCard} key={item}>
             <Text style={styles.experienceIcon}>🎮</Text>
 
             <View style={styles.experienceContent}>
-              <Text style={styles.experienceTitle}>
-                {item}
-              </Text>
-
-              <Text style={styles.experiencePrice}>
-                R750
-              </Text>
+              <Text style={styles.experienceTitle}>{item}</Text>
+              <Text style={styles.experiencePrice}>R750</Text>
             </View>
           </View>
         ))}
       </View>
 
-      {/* Booking CTA */}
+      {/* Final CTA area guiding the user to the next action. */}
       <View style={styles.cta}>
-        <Text style={styles.ctaTitle}>
-          READY TO LEVEL UP?
-        </Text>
+        <Text style={styles.ctaTitle}>READY TO LEVEL UP?</Text>
 
         <Text style={styles.ctaText}>
-          Choose your experience and start your Next Level
-          adventure.
+          Choose your experience and start your Next Level adventure.
         </Text>
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => router.push('/calculate-fees')}
+          onPress={() => router.push('/about')}
         >
-          <Text style={styles.buttonText}>
-            CALCULATE FEES
-          </Text>
+          <Text style={styles.buttonText}>CALCULATE FEES</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.homeButton}
+          onPress={() => router.push('/')}
+        >
+          <Text style={styles.homeButtonText}>BACK TO HOME</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -325,4 +313,17 @@ const styles = StyleSheet.create({
     color: '#170398',
     fontWeight: 'bold',
   },
+  homeButton: {
+  marginTop: 12,
+  paddingVertical: 12,
+  paddingHorizontal: 25,
+  borderRadius: 10,
+  borderWidth: 1,
+  borderColor: '#5ACF29',
+},
+
+homeButtonText: {
+  color: '#5ACF29',
+  fontWeight: 'bold',
+},
 });
