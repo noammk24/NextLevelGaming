@@ -1,56 +1,67 @@
-# Welcome to your Expo app 👋
+# Next Level Gaming & Esports Arena
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A mobile application for Next Level Gaming & Esports Arena, a fictional gaming and esports venue in Johannesburg, South Africa. Customers can browse gaming packages and individual experiences, calculate booking fees with discounts, and get in touch with the arena.
 
-## Get started
+Built as a university group project.
 
-1. Install dependencies
+## Features
 
-   ```bash
-   npm install
-   ```
+- Home screen with the arena's branding and package highlights
+- About Us screen with the arena's story and activities
+- Overview of four gaming packages (R1,500 each) and three individual experiences (R750 each)
+- Fee calculator with discounts: 5% for two bookings, 10% for three, 15% for more than three
+- Contact Us screen
 
-2. Start the app
+## Tech Stack
 
-   ```bash
-   npx expo start
-   ```
+- React Native
+- Expo (tested in Expo Go)
+- TypeScript
+- Expo Router
 
-In the output, you'll find options to open the app in a
+## Getting Started
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+1. Clone the repository and install dependencies:
 
 ```bash
-npm run reset-project
+git clone [repository URL]
+cd NextLevelGaming
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Start the development server:
 
-### Other setup steps
+```bash
+npx expo start
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+3. Scan the QR code with Expo Go on your phone.
 
-## Learn more
+## Project Structure
 
-To learn more about developing your project with Expo, look at the following resources:
+```
+src/app/        Screens and navigation (Expo Router)
+components/     Reusable UI components
+constants/      Theme, package data and image config
+assets/images/  Logo and image assets
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Brand Colours
 
-## Join the community
+| Colour | Hex | Used for |
+|---|---|---|
+| Deep blue | `#170398` | Headers, headings, professionalism |
+| Cyan / turquoise | `#0499B1` | Accents, innovation |
+| Bright green | `#5ACF29` | Buttons, energy and competition |
+| Light grey | `#D9D9D9` | Borders, backgrounds |
+| White | `#FFFFFF` | Readability |
 
-Join our community of developers creating universal apps.
+## Team
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+| Member | student number |
+|---|---|
+| [mulenga noam] | ST10517736 |
+| [Cain joseph ] | [ST10541995 ] |
+| [Neo sipho] | [ST10535603 ] |
+| [umile mbombela ] | [ST10524342 ] |
+
