@@ -1,118 +1,158 @@
 import React, { useState } from 'react';
 import {
-  Alert,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { ActionButton } from '@/components/ActionButton';
+import { BrandHeader } from '@/components/BrandHeader';
+import { COLORS, RADIUS, SPACING } from '@/constants/theme';
 
 export default function ContactScreen() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [feedback, setFeedback] = useState<{
+    type: 'error' | 'info';
+    message: string;
+  } | null>(null);
 
   const handleSubmit = () => {
     if (!name.trim() || !email.trim() || !message.trim()) {
-      Alert.alert('Missing information', 'Please complete all fields.');
+      setFeedback({
+        type: 'error',
+        message: 'Please complete your name, email address and message.',
+      });
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      Alert.alert('Invalid email', 'Please enter a valid email address.');
+      setFeedback({
+        type: 'error',
+        message: 'Please enter a valid email address.',
+      });
       return;
     }
 
-    Alert.alert(
-      'Message submitted',
-      'Thank you for contacting Next Level Gaming & Esports Arena!'
-    );
-
-    setName('');
-    setEmail('');
-    setMessage('');
+    setFeedback({
+      type: 'info',
+      message: 'Your details are valid. This project demo does not send or store messages.',
+    });
   };
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
-      <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.logo}>NL</Text>
-        <View>
-          <Text style={styles.brand}>NEXT LEVEL</Text>
-          <Text style={styles.subtitle}>GAMING & ESPORTS ARENA</Text>
-        </View>
-      </View>
+      <KeyboardAvoidingView
+        style={styles.safeArea}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.content}>
+          <BrandHeader />
+          <View style={styles.hero}>
+            <Text style={styles.eyebrow}>WE’RE HERE TO HELP</Text>
+            <Text style={styles.title}>CONTACT US</Text>
+            <Text style={styles.heroText}>
+              Have a question about an experience or group event? Prepare an enquiry below.
+            </Text>
+          </View>
 
-      <View style={styles.hero}>
-        <Text style={styles.title}>CONTACT US</Text>
-        <Text style={styles.heroText}>
-          Have a question? Get in touch with our team.
-        </Text>
-      </View>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>GET IN TOUCH</Text>
+            <Text style={styles.info}>Johannesburg, South Africa</Text>
+            <Text style={styles.info}>
+              Gaming, esports, parties, school outings and corporate events.
+            </Text>
+            <Text style={styles.formNote}>
+              Complete the form to validate your enquiry. This demo does not send or store messages.
+            </Text>
 
-      <View style={styles.section}>
-        <Text style={styles.heading}>GET IN TOUCH</Text>
+            <Text style={styles.label}>Full name</Text>
+            <TextInput
+              accessibilityLabel="Full name"
+              style={styles.input}
+              placeholder="Enter your full name"
+              placeholderTextColor="#777777"
+              value={name}
+              onChangeText={(value) => {
+                setName(value);
+                setFeedback(null);
+              }}
+              autoCapitalize="words"
+              autoComplete="name"
+              returnKeyType="next"
+            />
 
-        <Text style={styles.info}>
-          📍 Location: Johannesburg, South Africa
-        </Text>
-        <Text style={styles.info}>
-          🎮 Gaming, esports and special events
-        </Text>
+            <Text style={styles.label}>Email address</Text>
+            <TextInput
+              accessibilityLabel="Email address"
+              style={styles.input}
+              placeholder="Enter your email address"
+              placeholderTextColor="#777777"
+              value={email}
+              onChangeText={(value) => {
+                setEmail(value);
+                setFeedback(null);
+              }}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoComplete="email"
+              autoCorrect={false}
+              returnKeyType="next"
+            />
 
-        <Text style={styles.heading}>SEND US A MESSAGE</Text>
+            <Text style={styles.label}>Message</Text>
+            <TextInput
+              accessibilityLabel="Enquiry message"
+              style={[styles.input, styles.messageInput]}
+              placeholder="How can we help?"
+              placeholderTextColor="#777777"
+              value={message}
+              onChangeText={(value) => {
+                setMessage(value);
+                setFeedback(null);
+              }}
+              multiline
+              textAlignVertical="top"
+              maxLength={1000}
+            />
+            <Text style={styles.characterCount}>{message.length}/1000</Text>
+            {feedback && (
+              <Text
+                accessibilityRole="alert"
+                style={[
+                  styles.feedback,
+                  feedback.type === 'error' ? styles.errorFeedback : styles.infoFeedback,
+                ]}>
+                {feedback.message}
+              </Text>
+            )}
 
-        <Text style={styles.label}>Full Name</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your full name"
-          placeholderTextColor="#999999"
-          value={name}
-          onChangeText={setName}
-        />
-
-        <Text style={styles.label}>Email Address</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your email address"
-          placeholderTextColor="#999999"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-
-        <Text style={styles.label}>Message</Text>
-        <TextInput
-          style={[styles.input, styles.messageInput]}
-          placeholder="How can we help you?"
-          placeholderTextColor="#999999"
-          value={message}
-          onChangeText={setMessage}
-          multiline
-          textAlignVertical="top"
-        />
-
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleSubmit}
-        >
-          <Text style={styles.buttonText}>SUBMIT MESSAGE</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.push('/')}
-        >
-          <Text style={styles.backText}>BACK TO HOME</Text>
-        </TouchableOpacity>
-      </View>
-      </ScrollView>
+            <ActionButton label="VALIDATE ENQUIRY" onPress={handleSubmit} />
+            <View style={styles.secondaryAction}>
+              <ActionButton
+                label="VIEW EXPERIENCES"
+                variant="outline"
+                onPress={() => router.push('/overview')}
+              />
+            </View>
+            <View style={styles.secondaryAction}>
+              <ActionButton
+                label="BACK TO HOME"
+                variant="secondary"
+                onPress={() => router.push('/')}
+              />
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -120,108 +160,93 @@ export default function ContactScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#0B0B20',
+    backgroundColor: COLORS.background,
   },
-  container: {
-    flex: 1,
-    backgroundColor: '#0B0B20',
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#170398',
-  },
-  logo: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: '#5ACF29',
-    color: '#170398',
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    fontSize: 21,
-    fontWeight: '900',
-    marginRight: 12,
-  },
-  brand: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '900',
-  },
-  subtitle: {
-    color: '#D9D9D9',
-    fontSize: 10,
-    marginTop: 3,
+  content: {
+    paddingBottom: SPACING.large,
   },
   hero: {
-    backgroundColor: '#0499B1',
-    padding: 28,
+    padding: SPACING.large,
+    backgroundColor: COLORS.cyan,
+  },
+  eyebrow: {
+    color: COLORS.blue,
+    fontSize: 11,
+    fontWeight: '900',
+    letterSpacing: 1,
   },
   title: {
-    color: '#FFFFFF',
-    fontSize: 30,
+    color: COLORS.white,
+    fontSize: 32,
     fontWeight: '900',
+    marginTop: SPACING.small,
   },
   heroText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    marginTop: 8,
+    color: COLORS.white,
+    fontSize: 15,
+    lineHeight: 23,
+    marginTop: SPACING.small,
   },
   section: {
-    padding: 20,
+    padding: SPACING.medium,
   },
-  heading: {
-    color: '#5ACF29',
+  sectionTitle: {
+    color: COLORS.green,
     fontSize: 21,
-    fontWeight: 'bold',
-    marginTop: 12,
-    marginBottom: 16,
+    fontWeight: '900',
+    marginBottom: SPACING.small,
   },
   info: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 14,
-    marginBottom: 12,
-    lineHeight: 22,
+    lineHeight: 21,
+    marginBottom: SPACING.small,
+  },
+  formNote: {
+    color: COLORS.grey,
+    fontSize: 13,
+    lineHeight: 19,
+    backgroundColor: COLORS.card,
+    borderRadius: RADIUS.small,
+    padding: SPACING.medium,
+    marginVertical: SPACING.medium,
   },
   label: {
-    color: '#FFFFFF',
-    fontWeight: 'bold',
-    marginBottom: 8,
+    color: COLORS.white,
+    fontSize: 14,
+    fontWeight: '800',
+    marginBottom: SPACING.small,
   },
   input: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    padding: 14,
+    backgroundColor: COLORS.white,
+    borderRadius: RADIUS.small,
+    padding: SPACING.medium,
     fontSize: 15,
-    marginBottom: 18,
-    color: '#111111',
+    marginBottom: SPACING.medium,
+    color: COLORS.darkText,
   },
   messageInput: {
-    minHeight: 120,
+    minHeight: 130,
   },
-  button: {
-    backgroundColor: '#5ACF29',
-    padding: 16,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginTop: 5,
+  characterCount: {
+    alignSelf: 'flex-end',
+    color: COLORS.grey,
+    fontSize: 12,
+    marginTop: -SPACING.small,
+    marginBottom: SPACING.medium,
   },
-  buttonText: {
-    color: '#170398',
-    fontWeight: '900',
+  feedback: {
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: SPACING.medium,
   },
-  backButton: {
-    borderWidth: 1,
-    borderColor: '#5ACF29',
-    padding: 14,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginTop: 14,
-    marginBottom: 20,
+  errorFeedback: {
+    color: COLORS.cyan,
   },
-  backText: {
-    color: '#5ACF29',
-    fontWeight: 'bold',
+  infoFeedback: {
+    color: COLORS.green,
+  },
+  secondaryAction: {
+    marginTop: SPACING.small,
   },
 });
