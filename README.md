@@ -60,8 +60,8 @@ assets/images/  Logo and image assets
 
 | Member | student number |
 |---|---|
-| [mulenga noam] | ST10517736 |
-| [Cain joseph ] | [ST10541995 ] |
-| [Neo sipho] | [ST10535603 ] |
-| [umile mbombela ] | [ST10524342 ] |
+| mulenga noam | ST10517736 |
+| Cain joseph | ST10541995  |
+| Neo sipho | ST10535603 |
+| umile mbombela  | ST10524342 |
 
