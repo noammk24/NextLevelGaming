@@ -1,226 +1,182 @@
 import React from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { ActionButton } from '@/components/ActionButton';
+import { BrandHeader } from '@/components/BrandHeader';
+import { GamingImage } from '@/components/GamingImage';
+import { COLORS, RADIUS, SPACING } from '@/constants/theme';
+
+const gamingImage =
+  'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80';
+
+const activities = [
+  {
+    title: 'Gaming and esports',
+    description: 'Enjoy recreational gaming and take part in competitive esports activities.',
+  },
+  {
+    title: 'Special occasions',
+    description: 'Bring friends and family together for birthday parties and group celebrations.',
+  },
+  {
+    title: 'Groups and events',
+    description: 'Plan a school outing, corporate event, gaming tournament or club activity.',
+  },
+];
 
 export default function AboutScreen() {
   return (
-    <ScrollView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.logo}>NL</Text>
-
-        <View>
-          <Text style={styles.brand}>NEXT LEVEL</Text>
-          <Text style={styles.subtitle}>GAMING & ESPORTS ARENA</Text>
+    <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
+        <BrandHeader />
+        <View style={styles.hero}>
+          <Text style={styles.eyebrow}>OUR STORY</Text>
+          <Text style={styles.title}>ABOUT US</Text>
+          <Text style={styles.subtitle}>A place to play, compete and connect.</Text>
         </View>
-      </View>
 
-      {/* Page Title */}
-      <View style={styles.hero}>
-        <Text style={styles.title}>ABOUT US</Text>
-        <Text style={styles.titleLine}>
-          LEVEL UP YOUR EXPERIENCE
-        </Text>
-      </View>
+        <View style={styles.imageWrap}>
+          <GamingImage
+            imageUrl={gamingImage}
+            accessibilityLabel="Esports players competing at a gaming event"
+            style={styles.image}
+          />
+        </View>
 
-      {/* About */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>WHO WE ARE</Text>
-
-        <Text style={styles.text}>
-          Next Level Gaming & Esports Arena is a modern gaming and
-          esports venue based in Johannesburg. We provide an exciting
-          environment where gamers, families, schools, gaming clubs
-          and businesses can enjoy competitive and recreational gaming.
-        </Text>
-
-        <Text style={styles.text}>
-          Our arena hosts gaming events, esports tournaments, birthday
-          parties, school outings and corporate team-building
-          experiences.
-        </Text>
-      </View>
-
-      {/* Mission */}
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>OUR MISSION</Text>
-
-        <Text style={styles.cardText}>
-          To create an exciting, welcoming and high-quality gaming
-          environment where everyone can connect, compete and have fun.
-        </Text>
-      </View>
-
-      {/* What We Offer */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>WHAT WE OFFER</Text>
-
-        <View style={styles.offer}>
-          <Text style={styles.offerTitle}>🎮 Gaming Experiences</Text>
-          <Text style={styles.offerText}>
-            Enjoy a variety of gaming and entertainment experiences.
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>HOW IT STARTED</Text>
+          <Text style={styles.text}>
+            Next Level Gaming & Esports Arena is a fictional gaming venue based in Johannesburg, South Africa. The scenario for the business describes it as established in 2023 by Jason Naidoo.
+          </Text>
+          <Text style={styles.text}>
+            The arena brings gaming and esports experiences together in one place, welcoming people who want to play for fun, enjoy an activity with a group or explore competitive gaming.
           </Text>
         </View>
 
-        <View style={styles.offer}>
-          <Text style={styles.offerTitle}>🏆 Esports Events</Text>
-          <Text style={styles.offerText}>
-            Take part in competitive gaming and esports activities.
+        <View style={styles.callout}>
+          <Text style={styles.calloutTitle}>WHO CAN JOIN IN?</Text>
+          <Text style={styles.calloutText}>
+            Gamers, families, school groups, gaming clubs and businesses can explore experiences suited to individuals and groups.
           </Text>
         </View>
 
-        <View style={styles.offer}>
-          <Text style={styles.offerTitle}>🎉 Special Events</Text>
-          <Text style={styles.offerText}>
-            Birthday parties, school outings and corporate events.
-          </Text>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>WHAT HAPPENS HERE</Text>
+          {activities.map((activity) => (
+            <View style={styles.activity} key={activity.title}>
+              <Text style={styles.activityTitle}>{activity.title}</Text>
+              <Text style={styles.activityText}>{activity.description}</Text>
+            </View>
+          ))}
         </View>
-      </View>
 
-      {/* Button */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => router.push('/overview')}
-      >
-        <Text style={styles.buttonText}>EXPLORE OUR EXPERIENCES</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <View style={styles.actions}>
+          <ActionButton
+            label="EXPLORE OUR EXPERIENCES"
+            onPress={() => router.push('/overview')}
+          />
+          <ActionButton
+            label="BACK TO HOME"
+            variant="secondary"
+            onPress={() => router.push('/')}
+          />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
-    backgroundColor: '#0B0B20',
+    backgroundColor: COLORS.background,
   },
-
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#170398',
+  content: {
+    paddingBottom: SPACING.large,
   },
-
-  logo: {
-    width: 55,
-    height: 55,
-    borderRadius: 30,
-    backgroundColor: '#5ACF29',
-    color: '#170398',
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginRight: 12,
-  },
-
-  brand: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-
-  subtitle: {
-    color: '#D9D9D9',
-    fontSize: 10,
-    marginTop: 2,
-  },
-
   hero: {
-    padding: 30,
-    backgroundColor: '#0499B1',
+    padding: SPACING.large,
+    backgroundColor: COLORS.cyan,
   },
-
-  title: {
-    color: '#FFFFFF',
-    fontSize: 32,
+  eyebrow: {
+    color: COLORS.blue,
+    fontSize: 12,
     fontWeight: '900',
+    letterSpacing: 1.3,
   },
-
-  titleLine: {
-    color: '#D9D9D9',
-    fontSize: 14,
-    marginTop: 8,
-    fontWeight: 'bold',
+  title: {
+    color: COLORS.white,
+    fontSize: 34,
+    fontWeight: '900',
+    marginTop: SPACING.small,
   },
-
+  subtitle: {
+    color: COLORS.white,
+    fontSize: 16,
+    lineHeight: 23,
+    marginTop: SPACING.small,
+  },
+  imageWrap: {
+    paddingHorizontal: SPACING.medium,
+    paddingTop: SPACING.medium,
+  },
+  image: {
+    height: 220,
+  },
   section: {
-    padding: 20,
+    padding: SPACING.medium,
   },
-
   sectionTitle: {
-    color: '#5ACF29',
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 12,
+    color: COLORS.green,
+    fontSize: 21,
+    fontWeight: '900',
+    marginBottom: SPACING.small,
   },
-
   text: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 15,
     lineHeight: 24,
-    marginBottom: 14,
+    marginBottom: SPACING.medium,
   },
-
-  card: {
-    margin: 20,
-    padding: 22,
-    borderRadius: 16,
-    backgroundColor: '#170398',
+  callout: {
+    marginHorizontal: SPACING.medium,
+    padding: SPACING.large,
+    borderRadius: RADIUS.large,
+    backgroundColor: COLORS.blue,
     borderWidth: 1,
-    borderColor: '#0499B1',
+    borderColor: COLORS.cyan,
   },
-
-  cardTitle: {
-    color: '#5ACF29',
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
+  calloutTitle: {
+    color: COLORS.green,
+    fontSize: 19,
+    fontWeight: '900',
+    marginBottom: SPACING.small,
   },
-
-  cardText: {
-    color: '#FFFFFF',
+  calloutText: {
+    color: COLORS.white,
     fontSize: 15,
     lineHeight: 23,
   },
-
-  offer: {
-    backgroundColor: '#151538',
-    padding: 18,
-    borderRadius: 14,
-    marginBottom: 12,
+  activity: {
+    padding: SPACING.medium,
+    borderRadius: RADIUS.medium,
+    backgroundColor: COLORS.card,
+    marginBottom: SPACING.small,
   },
-
-  offerTitle: {
-    color: '#FFFFFF',
-    fontSize: 17,
-    fontWeight: 'bold',
+  activityTitle: {
+    color: COLORS.white,
+    fontSize: 16,
+    fontWeight: '800',
     marginBottom: 6,
   },
-
-  offerText: {
-    color: '#D9D9D9',
+  activityText: {
+    color: COLORS.grey,
     fontSize: 14,
-    lineHeight: 20,
+    lineHeight: 21,
   },
-
-  button: {
-    backgroundColor: '#5ACF29',
-    margin: 20,
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-
-  buttonText: {
-    color: '#170398',
-    fontWeight: 'bold',
-    fontSize: 15,
+  actions: {
+    paddingHorizontal: SPACING.medium,
+    gap: SPACING.small,
   },
 });

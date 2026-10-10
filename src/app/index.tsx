@@ -1,155 +1,90 @@
 import React from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import PackageCard from '../constants/PackageCard';
-import { COLORS } from '../constants/theme';
-
-type PackageItem = {
-  title: string;
-  price: string;
-};
-
-type PackageSection = {
-  title: string;
-  items: PackageItem[];
-};
-
-const PACKAGE_SECTIONS: PackageSection[] = [
-  {
-    title: 'GAMING PACKAGES',
-    items: [
-      { title: 'Ultimate Gamer Pass', price: 'R1,500' },
-      { title: 'VIP Gaming Experience', price: 'R1,500' },
-      { title: 'Esports Training Package', price: 'R1,500' },
-      { title: 'Birthday Party Package', price: 'R1,500' },
-    ],
-  },
-  {
-    title: 'INDIVIDUAL EXPERIENCES',
-    items: [
-      { title: 'Virtual Reality Experience', price: 'R750' },
-      { title: 'Racing Simulator Challenge', price: 'R750' },
-      { title: 'Escape Room Challenge', price: 'R750' },
-    ],
-  },
-];
+import { ActionButton } from '@/components/ActionButton';
+import { BrandHeader } from '@/components/BrandHeader';
+import PackageCard from '@/constants/PackageCard';
+import { COLORS, RADIUS, SPACING } from '@/constants/theme';
+import { GAMING_PACKAGES, INDIVIDUAL_EXPERIENCES } from '@/constants/experiences';
 
 export default function HomeScreen() {
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.logoPlaceholder}>
-            <Text style={styles.logoText}>NL</Text>
-          </View>
+    <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
+        <BrandHeader />
 
-          <View>
-            <Text style={styles.brandName}>NEXT LEVEL</Text>
-            <Text style={styles.brandSubtitle}>
-              GAMING & ESPORTS ARENA
-            </Text>
-          </View>
-        </View>
-
-        {/* Hero Section */}
         <View style={styles.hero}>
-          <Text style={styles.heroTitle}>
-            LEVEL UP{'\n'}YOUR GAME
-          </Text>
-
+          <Text style={styles.eyebrow}>JOHANNESBURG • SOUTH AFRICA</Text>
+          <Text style={styles.heroTitle}>LEVEL UP{'\n'}YOUR GAME</Text>
           <Text style={styles.heroText}>
-            Experience gaming, esports and unforgettable entertainment
-            at Next Level Gaming & Esports Arena.
+            Step into a world of gaming, esports and shared experiences at Next Level Gaming & Esports Arena.
           </Text>
-
-          <TouchableOpacity
-            style={styles.primaryButton}
+          <ActionButton
+            label="EXPLORE EXPERIENCES"
             onPress={() => router.push('/overview')}
-          >
-            <Text style={styles.primaryButtonText}>
-              EXPLORE EXPERIENCES
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.secondaryButton}
+          />
+          <ActionButton
+            label="OUR STORY"
+            variant="outline"
             onPress={() => router.push('/about')}
-          >
-            <Text style={styles.secondaryButtonText}>
-              ABOUT US
-            </Text>
-          </TouchableOpacity>
+          />
         </View>
 
-        {/* Introduction */}
+        <View style={styles.intro}>
+          <Text style={styles.sectionEyebrow}>WELCOME TO NEXT LEVEL</Text>
+          <Text style={styles.introTitle}>Your place to play, compete and connect.</Text>
+          <Text style={styles.bodyText}>
+            Find gaming packages and individual experiences for players, families, schools and groups.
+          </Text>
+        </View>
+
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            NEXT LEVEL GAMING
-          </Text>
-
-          <Text style={styles.sectionText}>
-            A modern gaming and esports arena designed for gamers,
-            families, schools, gaming clubs and businesses.
-          </Text>
+          <Text style={styles.sectionTitle}>GAMING PACKAGES</Text>
+          <Text style={styles.bodyText}>Find a package that fits your next gaming session or event.</Text>
+          {GAMING_PACKAGES.map((item) => (
+            <PackageCard
+              key={item.title}
+              {...item}
+              actionLabel="VIEW PACKAGE"
+              actionRoute="/overview"
+            />
+          ))}
         </View>
 
-        {/* Gaming Packages and Individual Experiences */}
-        {PACKAGE_SECTIONS.map((section) => (
-          <View key={section.title} style={styles.section}>
-            <Text style={styles.sectionTitle}>
-              {section.title}
-            </Text>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>INDIVIDUAL EXPERIENCES</Text>
+          <Text style={styles.bodyText}>Choose a standalone activity and take on a new challenge.</Text>
+          {INDIVIDUAL_EXPERIENCES.map((item) => (
+            <PackageCard
+              key={item.title}
+              {...item}
+              actionLabel="CALCULATE FEES"
+              actionRoute="/calculate-fees"
+            />
+          ))}
+        </View>
 
-            {section.items.map((item) => (
-              <PackageCard
-                key={item.title}
-                title={item.title}
-                price={item.price}
-              />
-            ))}
-          </View>
-        ))}
-
-        {/* Main Actions */}
-        <View style={styles.cta}>
-          <Text style={styles.ctaTitle}>
-            READY TO LEVEL UP?
+        <View style={styles.callToAction}>
+          <Text style={styles.ctaEyebrow}>YOUR NEXT SESSION STARTS HERE</Text>
+          <Text style={styles.ctaTitle}>Ready to level up?</Text>
+          <Text style={styles.ctaText}>
+            Browse the full experience list, calculate fees or get in touch with the arena.
           </Text>
-
-          <TouchableOpacity
-            style={styles.primaryButton}
+          <ActionButton
+            label="VIEW PACKAGES"
             onPress={() => router.push('/overview')}
-          >
-            <Text style={styles.primaryButtonText}>
-              VIEW PACKAGES
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.secondaryButton}
+          />
+          <ActionButton
+            label="CALCULATE FEES"
+            variant="secondary"
             onPress={() => router.push('/calculate-fees')}
-          >
-            <Text style={styles.secondaryButtonText}>
-              CALCULATE FEES
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.contactButton}
+          />
+          <ActionButton
+            label="CONTACT US"
+            variant="outline"
             onPress={() => router.push('/contact')}
-          >
-            <Text style={styles.contactButtonText}>
-              CONTACT US
-            </Text>
-          </TouchableOpacity>
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -159,194 +94,90 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.background,
   },
-
-  header: {
-    minHeight: 75,
-    backgroundColor: COLORS.blue,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+  content: {
+    paddingBottom: SPACING.large,
+    backgroundColor: COLORS.background,
   },
-
-  logoPlaceholder: {
-    width: 45,
-    height: 45,
-    borderRadius: 23,
-    backgroundColor: COLORS.green,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-
-  logoText: {
-    color: COLORS.blue,
-    fontSize: 18,
-    fontWeight: '900',
-  },
-
-  brandName: {
-    color: COLORS.white,
-    fontSize: 18,
-    fontWeight: '800',
-  },
-
-  brandSubtitle: {
-    color: COLORS.grey,
-    fontSize: 10,
-    marginTop: 3,
-  },
-
   hero: {
+    padding: SPACING.large,
     backgroundColor: COLORS.blue,
-    paddingHorizontal: 24,
-    paddingVertical: 45,
+    gap: SPACING.medium,
   },
-
+  eyebrow: {
+    color: COLORS.green,
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 1.2,
+  },
   heroTitle: {
     color: COLORS.white,
-    fontSize: 38,
+    fontSize: 42,
+    lineHeight: 46,
     fontWeight: '900',
-    lineHeight: 43,
-    marginBottom: 18,
+    letterSpacing: -0.7,
   },
-
   heroText: {
-    color: COLORS.white,
-    fontSize: 16,
-    lineHeight: 24,
-    marginBottom: 25,
-  },
-
-  primaryButton: {
-    backgroundColor: COLORS.green,
-    paddingVertical: 15,
-    paddingHorizontal: 18,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-
-  primaryButtonText: {
-    color: COLORS.blue,
-    fontSize: 14,
-    fontWeight: '900',
-    textAlign: 'center',
-  },
-
-  secondaryButton: {
-    backgroundColor: COLORS.white,
-    paddingVertical: 15,
-    paddingHorizontal: 18,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-
-  secondaryButtonText: {
-    color: COLORS.blue,
-    fontSize: 14,
-    fontWeight: '900',
-  },
-
-  section: {
-    paddingHorizontal: 20,
-    paddingVertical: 25,
-  },
-
-  sectionTitle: {
-    color: COLORS.blue,
-    fontSize: 22,
-    fontWeight: '900',
-    marginBottom: 14,
-  },
-
-  sectionText: {
-    color: '#333333',
+    color: COLORS.grey,
     fontSize: 16,
     lineHeight: 24,
   },
-
-  card: {
-    backgroundColor: '#F5F5F5',
-    borderRadius: 16,
-    marginBottom: 18,
-    padding: 14,
-    borderWidth: 1,
-    borderColor: '#EEEEEE',
-  },
-
-  imagePlaceholder: {
-    height: 145,
-    borderRadius: 12,
+  intro: {
+    padding: SPACING.large,
     backgroundColor: COLORS.cyan,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 14,
+    gap: SPACING.small,
   },
-
-  imageText: {
-    color: COLORS.white,
-    fontSize: 22,
-    fontWeight: '900',
-  },
-
-  cardTitle: {
+  sectionEyebrow: {
     color: COLORS.blue,
-    fontSize: 18,
-    fontWeight: '800',
-    marginBottom: 6,
-  },
-
-  cardPrice: {
-    color: COLORS.blue,
-    fontSize: 20,
+    fontSize: 12,
     fontWeight: '900',
-    marginBottom: 12,
+    letterSpacing: 1,
   },
-
-  smallButton: {
-    backgroundColor: COLORS.blue,
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-
-  smallButtonText: {
-    color: COLORS.white,
-    fontSize: 13,
-    fontWeight: '800',
-  },
-
-  cta: {
-    backgroundColor: COLORS.cyan,
-    margin: 20,
-    padding: 24,
-    borderRadius: 18,
-    marginBottom: 40,
-  },
-
-  ctaTitle: {
+  introTitle: {
     color: COLORS.white,
     fontSize: 24,
+    lineHeight: 30,
     fontWeight: '900',
-    marginBottom: 20,
-    textAlign: 'center',
   },
-
-  contactButton: {
-    borderWidth: 2,
-    borderColor: COLORS.white,
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 12,
+  bodyText: {
+    color: COLORS.grey,
+    fontSize: 15,
+    lineHeight: 23,
+    marginBottom: SPACING.medium,
   },
-
-  contactButtonText: {
+  section: {
+    paddingHorizontal: SPACING.medium,
+    paddingTop: SPACING.large,
+  },
+  sectionTitle: {
     color: COLORS.white,
-    fontSize: 14,
+    fontSize: 22,
     fontWeight: '900',
+    marginBottom: SPACING.small,
+  },
+  callToAction: {
+    margin: SPACING.medium,
+    padding: SPACING.large,
+    borderRadius: RADIUS.large,
+    backgroundColor: COLORS.cyan,
+    gap: SPACING.small,
+  },
+  ctaEyebrow: {
+    color: COLORS.blue,
+    fontSize: 11,
+    fontWeight: '900',
+    letterSpacing: 1,
+  },
+  ctaTitle: {
+    color: COLORS.white,
+    fontSize: 27,
+    fontWeight: '900',
+  },
+  ctaText: {
+    color: COLORS.white,
+    fontSize: 15,
+    lineHeight: 23,
+    marginBottom: SPACING.small,
   },
 });

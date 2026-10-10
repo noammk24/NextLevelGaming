@@ -1,38 +1,45 @@
 
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { COLORS, RADIUS, SPACING } from '../constants/theme';
+import { ActionButton } from '../components/ActionButton';
+import { GamingImage } from '../components/GamingImage';
 
 type PackageCardProps = {
   title: string;
   price: string;
+  description: string;
+  imageUrl: string;
+  imageLabel: string;
+  actionLabel?: string;
+  actionRoute?: '/overview' | '/calculate-fees' | '/contact';
 };
 
 export default function PackageCard({
   title,
   price,
+  description,
+  imageUrl,
+  imageLabel,
+  actionLabel = 'VIEW DETAILS',
+  actionRoute = '/overview',
 }: PackageCardProps) {
   return (
     <View style={styles.card}>
-      <View style={styles.imagePlaceholder}>
-        <Text style={styles.imageText}>GAMING</Text>
-      </View>
+      <GamingImage
+        imageUrl={imageUrl}
+        accessibilityLabel={imageLabel}
+        style={styles.image}
+      />
 
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.price}>{price}</Text>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => router.push('/overview')}
-      >
-        <Text style={styles.buttonText}>VIEW DETAILS</Text>
-      </TouchableOpacity>
+      <Text style={styles.description}>{description}</Text>
+      <ActionButton
+        label={actionLabel}
+        onPress={() => router.push(actionRoute)}
+      />
     </View>
   );
 }
@@ -47,19 +54,8 @@ const styles = StyleSheet.create({
     borderColor: '#EEEEEE',
   },
 
-  imagePlaceholder: {
-    height: 145,
-    borderRadius: RADIUS.medium,
-    backgroundColor: COLORS.cyan,
-    justifyContent: 'center',
-    alignItems: 'center',
+  image: {
     marginBottom: SPACING.medium,
-  },
-
-  imageText: {
-    color: COLORS.white,
-    fontSize: 22,
-    fontWeight: '900',
   },
 
   title: {
@@ -73,19 +69,13 @@ const styles = StyleSheet.create({
     color: COLORS.blue,
     fontSize: 20,
     fontWeight: '900',
+    marginBottom: SPACING.small,
+  },
+
+  description: {
+    color: COLORS.darkText,
+    fontSize: 14,
+    lineHeight: 21,
     marginBottom: SPACING.medium,
-  },
-
-  button: {
-    backgroundColor: COLORS.blue,
-    paddingVertical: 12,
-    borderRadius: RADIUS.small,
-    alignItems: 'center',
-  },
-
-  buttonText: {
-    color: COLORS.white,
-    fontSize: 13,
-    fontWeight: '800',
   },
 });

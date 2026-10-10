@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 
 export default function ContactScreen() {
@@ -37,7 +38,8 @@ export default function ContactScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
+      <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.logo}>NL</Text>
         <View>
@@ -110,11 +112,16 @@ export default function ContactScreen() {
           <Text style={styles.backText}>BACK TO HOME</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#0B0B20',
+  },
   container: {
     flex: 1,
     backgroundColor: '#0B0B20',

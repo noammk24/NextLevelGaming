@@ -4,6 +4,8 @@ import {
   type TextProps,
   StyleSheet,
 } from 'react-native';
+import { ThemeTextColor } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 type ThemedTextProps = TextProps & {
   type?:
@@ -12,23 +14,33 @@ type ThemedTextProps = TextProps & {
     | 'subtitle'
     | 'defaultSemiBold'
     | 'link'
-    | 'code';
+    | 'code'
+    | 'small'
+    | 'smallBold'
+    | 'linkPrimary';
+  themeColor?: ThemeTextColor;
 };
 
 export function ThemedText({
   style,
   type = 'default',
+  themeColor = 'text',
   ...rest
 }: ThemedTextProps) {
+  const theme = useTheme();
+
   return (
     <Text
       style={[
         styles.default,
+        { color: theme[themeColor] },
         type === 'title' && styles.title,
         type === 'subtitle' && styles.subtitle,
         type === 'defaultSemiBold' && styles.semiBold,
-        type === 'link' && styles.link,
+        (type === 'link' || type === 'linkPrimary') && styles.link,
         type === 'code' && styles.code,
+        type === 'small' && styles.small,
+        type === 'smallBold' && styles.smallBold,
         style,
       ]}
       {...rest}
@@ -61,5 +73,14 @@ const styles = StyleSheet.create({
     fontFamily: 'monospace',
     fontWeight: '500',
     fontSize: 12,
+  },
+  small: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  smallBold: {
+    fontSize: 14,
+    lineHeight: 20,
+    fontWeight: '700',
   },
 });

@@ -6,16 +6,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-const COLORS = {
-  background: '#0B0B20',
-  blue: '#170398',
-  green: '#5ACF29',
-  cyan: '#0499B1',
-  white: '#FFFFFF',
-  grey: '#D9D9D9',
-  card: '#151538',
-};
+import { COLORS } from '@/constants/theme';
 
 const bookingOptions = [
   { id: 'ultimate', name: 'Ultimate Gamer Pass', price: 1500 },
@@ -69,7 +62,8 @@ export default function CalculateFeesScreen() {
     })}`;
 
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
+      <ScrollView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.logo}>
@@ -190,11 +184,16 @@ export default function CalculateFeesScreen() {
 </TouchableOpacity>
 
       <View style={styles.bottomSpace} />
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
