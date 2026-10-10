@@ -62,6 +62,6 @@ assets/images/  Logo and image assets
 |---|---|
 | mulenga noam | ST10517736 |
 | Cain joseph  | ST10541995  |
-| Neo sipho | [ST10535603 ] |
+| Neo sipho | ST10535603  |
 | umile mbombela  | ST10524342  |
 
