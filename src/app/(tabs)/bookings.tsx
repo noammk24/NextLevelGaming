@@ -73,9 +73,9 @@ export default function BookingsScreen() {
           </View>
 
           <Text style={styles.disclaimer}>
-            Demo estimate only. No reservation or payment is created.
+            This is an estimate. Sending a request does not guarantee a reservation or process payment.
           </Text>
-          <ActionButton label="CONTINUE TO CONFIRMATION" onPress={() => router.push('/confirmation')} />
+          <ActionButton label="REQUEST A BOOKING" onPress={() => router.push('/confirmation')} />
           <View style={styles.clearButton}>
             <ActionButton label="CLEAR SELECTION" variant="outline" onPress={clearItems} />
           </View>

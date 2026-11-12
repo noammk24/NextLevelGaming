@@ -51,7 +51,9 @@ export default function OverviewScreen() {
         <Text style={styles.cardTitle}>Booking process</Text>
         <Text style={styles.step}>1. Browse packages and individual experiences.</Text>
         <Text style={styles.step}>2. Add items to your booking and review the estimate.</Text>
-        <Text style={styles.step}>3. Confirm the demo summary; no reservation or payment is made.</Text>
+        <Text style={styles.step}>
+          3. Send a booking request and wait for the arena to confirm availability.
+        </Text>
       </View>
 
       <View style={styles.action}>
