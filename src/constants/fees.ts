@@ -8,6 +8,10 @@ export type FeeSummary = {
   total: number;
 };
 
+export function formatZar(amount: number) {
+  return `R${Math.round(amount).toLocaleString('en-US')}`;
+}
+
 export function calculateFeeSummary(
   selectedItems: readonly Pick<GamingExperience, 'priceAmount' | 'type'>[],
 ): FeeSummary {

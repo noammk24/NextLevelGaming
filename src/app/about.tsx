@@ -1,182 +1,139 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
-import { ActionButton } from '@/components/ActionButton';
-import { BrandHeader } from '@/components/BrandHeader';
+import { StyleSheet, Text, View } from 'react-native';
 import { GamingImage } from '@/components/GamingImage';
-import { COLORS, RADIUS, SPACING } from '@/constants/theme';
+import { ScreenLayout } from '@/components/ScreenLayout';
+import { SectionHeader } from '@/components/SectionHeader';
+import { GAMING_PACKAGES, INDIVIDUAL_EXPERIENCES } from '@/constants/experiences';
+import { COLORS, FONT_FAMILY, RADIUS, SPACING } from '@/constants/theme';
 
-const gamingImage =
-  'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80';
+const gallery = [
+  GAMING_PACKAGES[0],
+  GAMING_PACKAGES[2],
+  INDIVIDUAL_EXPERIENCES[1],
+];
 
-const activities = [
+const values = [
   {
-    title: 'Gaming and esports',
-    description: 'Enjoy recreational gaming and take part in competitive esports activities.',
+    title: 'Play',
+    description: 'Enjoy recreational gaming and shared experiences at the arena.',
   },
   {
-    title: 'Special occasions',
-    description: 'Bring friends and family together for birthday parties and group celebrations.',
+    title: 'Compete',
+    description: 'Explore competitive esports and training experiences.',
   },
   {
-    title: 'Groups and events',
-    description: 'Plan a school outing, corporate event, gaming tournament or club activity.',
+    title: 'Connect',
+    description: 'Bring friends, families, schools, clubs, and businesses together.',
   },
 ];
 
 export default function AboutScreen() {
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.content}>
-        <BrandHeader />
-        <View style={styles.hero}>
-          <Text style={styles.eyebrow}>OUR STORY</Text>
-          <Text style={styles.title}>ABOUT US</Text>
-          <Text style={styles.subtitle}>A place to play, compete and connect.</Text>
-        </View>
+    <ScreenLayout showBack>
+      <SectionHeader
+        eyebrow="OUR STORY"
+        title="About Next Level"
+        description="A place to play, compete and connect."
+      />
 
-        <View style={styles.imageWrap}>
+      <View style={styles.panel}>
+        <Text style={styles.panelTitle}>OUR STORY</Text>
+        <Text style={styles.body}>
+          Next Level Gaming & Esports Arena is a fictional venue in Johannesburg, South Africa.
+          The project scenario describes it as established in 2023 by Jason Naidoo.
+        </Text>
+        <Text style={styles.body}>
+          The arena brings gaming and esports experiences together for individuals and groups.
+        </Text>
+      </View>
+
+      <View style={styles.section}>
+        <SectionHeader title="Mission and values" />
+        <Text style={styles.body}>
+          Our mission is to provide a place to play, compete and connect through gaming.
+        </Text>
+        {values.map((value) => (
+          <View key={value.title} style={styles.valueCard}>
+            <Text style={styles.valueTitle}>{value.title}</Text>
+            <Text style={styles.valueDescription}>{value.description}</Text>
+          </View>
+        ))}
+      </View>
+
+      <View style={styles.section}>
+        <SectionHeader
+          title="Venue gallery"
+          description="Gaming and esports imagery used by the project."
+        />
+        {gallery.map((item) => (
           <GamingImage
-            imageUrl={gamingImage}
-            accessibilityLabel="Esports players competing at a gaming event"
-            style={styles.image}
+            key={item.id}
+            imageUrl={item.imageUrl}
+            accessibilityLabel={item.imageLabel}
+            style={styles.galleryImage}
           />
-        </View>
+        ))}
+      </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>HOW IT STARTED</Text>
-          <Text style={styles.text}>
-            Next Level Gaming & Esports Arena is a fictional gaming venue based in Johannesburg, South Africa. The scenario for the business describes it as established in 2023 by Jason Naidoo.
-          </Text>
-          <Text style={styles.text}>
-            The arena brings gaming and esports experiences together in one place, welcoming people who want to play for fun, enjoy an activity with a group or explore competitive gaming.
-          </Text>
-        </View>
+      <View style={styles.panel}>
+        <Text style={styles.panelTitle}>LEADERSHIP</Text>
+        <Text style={styles.body}>The project scenario names Jason Naidoo as the arena founder.</Text>
+      </View>
 
-        <View style={styles.callout}>
-          <Text style={styles.calloutTitle}>WHO CAN JOIN IN?</Text>
-          <Text style={styles.calloutText}>
-            Gamers, families, school groups, gaming clubs and businesses can explore experiences suited to individuals and groups.
-          </Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>WHAT HAPPENS HERE</Text>
-          {activities.map((activity) => (
-            <View style={styles.activity} key={activity.title}>
-              <Text style={styles.activityTitle}>{activity.title}</Text>
-              <Text style={styles.activityText}>{activity.description}</Text>
-            </View>
-          ))}
-        </View>
-
-        <View style={styles.actions}>
-          <ActionButton
-            label="EXPLORE OUR EXPERIENCES"
-            onPress={() => router.push('/overview')}
-          />
-          <ActionButton
-            label="BACK TO HOME"
-            variant="secondary"
-            onPress={() => router.push('/')}
-          />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      <View style={styles.panel}>
+        <Text style={styles.panelTitle}>PARTNERS</Text>
+        <Text style={styles.body}>Partner information has not been supplied.</Text>
+      </View>
+    </ScreenLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  content: {
-    paddingBottom: SPACING.large,
-  },
-  hero: {
-    padding: SPACING.large,
-    backgroundColor: COLORS.cyan,
-  },
-  eyebrow: {
-    color: COLORS.blue,
-    fontSize: 12,
-    fontWeight: '900',
-    letterSpacing: 1.3,
-  },
-  title: {
-    color: COLORS.white,
-    fontSize: 34,
-    fontWeight: '900',
-    marginTop: SPACING.small,
-  },
-  subtitle: {
-    color: COLORS.white,
-    fontSize: 16,
-    lineHeight: 23,
-    marginTop: SPACING.small,
-  },
-  imageWrap: {
-    paddingHorizontal: SPACING.medium,
-    paddingTop: SPACING.medium,
-  },
-  image: {
-    height: 220,
-  },
   section: {
+    marginTop: SPACING.extraLarge,
+  },
+  panel: {
     padding: SPACING.medium,
-  },
-  sectionTitle: {
-    color: COLORS.green,
-    fontSize: 21,
-    fontWeight: '900',
-    marginBottom: SPACING.small,
-  },
-  text: {
-    color: COLORS.white,
-    fontSize: 15,
-    lineHeight: 24,
-    marginBottom: SPACING.medium,
-  },
-  callout: {
-    marginHorizontal: SPACING.medium,
-    padding: SPACING.large,
-    borderRadius: RADIUS.large,
-    backgroundColor: COLORS.blue,
-    borderWidth: 1,
-    borderColor: COLORS.cyan,
-  },
-  calloutTitle: {
-    color: COLORS.green,
-    fontSize: 19,
-    fontWeight: '900',
-    marginBottom: SPACING.small,
-  },
-  calloutText: {
-    color: COLORS.white,
-    fontSize: 15,
-    lineHeight: 23,
-  },
-  activity: {
-    padding: SPACING.medium,
+    marginTop: SPACING.medium,
     borderRadius: RADIUS.medium,
-    backgroundColor: COLORS.card,
+    backgroundColor: COLORS.paleBlue,
+  },
+  panelTitle: {
+    color: COLORS.blue,
+    fontSize: 13,
+    fontFamily: FONT_FAMILY.bold,
+    letterSpacing: 0.4,
     marginBottom: SPACING.small,
   },
-  activityTitle: {
-    color: COLORS.white,
-    fontSize: 16,
-    fontWeight: '800',
-    marginBottom: 6,
+  body: {
+    color: COLORS.darkText,
+    fontSize: 14,
+    lineHeight: 22,
+    fontFamily: FONT_FAMILY.regular,
+    marginBottom: SPACING.small,
   },
-  activityText: {
-    color: COLORS.grey,
+  valueCard: {
+    padding: SPACING.medium,
+    marginTop: SPACING.small,
+    borderRadius: RADIUS.medium,
+    backgroundColor: COLORS.white,
+    borderColor: COLORS.border,
+    borderWidth: 1,
+  },
+  valueTitle: {
+    color: COLORS.blue,
+    fontSize: 16,
+    fontFamily: FONT_FAMILY.bold,
+    marginBottom: 4,
+  },
+  valueDescription: {
+    color: COLORS.darkText,
     fontSize: 14,
     lineHeight: 21,
+    fontFamily: FONT_FAMILY.regular,
   },
-  actions: {
-    paddingHorizontal: SPACING.medium,
-    gap: SPACING.small,
+  galleryImage: {
+    height: 190,
+    marginBottom: SPACING.small,
   },
 });
