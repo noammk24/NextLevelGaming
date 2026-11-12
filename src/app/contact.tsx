@@ -15,6 +15,7 @@ import { ScreenLayout } from '@/components/ScreenLayout';
 import { SectionHeader } from '@/components/SectionHeader';
 import { CONTACT_DETAILS } from '@/constants/contact';
 import { COLORS, FONT_FAMILY, RADIUS, SPACING } from '@/constants/theme';
+import { submitFormspreeForm } from '@/services/formspree';
 
 type Feedback = {
   type: 'error' | 'success';
@@ -26,9 +27,14 @@ export default function ContactScreen() {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [feedback, setFeedback] = useState<Feedback | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submitEnquiry = () => {
-    if (!name.trim() || !email.trim() || !message.trim()) {
+  const submitEnquiry = async () => {
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedMessage = message.trim();
+
+    if (!trimmedName || !trimmedEmail || !trimmedMessage) {
       setFeedback({
         type: 'error',
         message: 'Please complete your name, email address, and message.',
@@ -36,7 +42,7 @@ export default function ContactScreen() {
       return;
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
       setFeedback({
         type: 'error',
         message: 'Please enter a valid email address.',
@@ -44,10 +50,35 @@ export default function ContactScreen() {
       return;
     }
 
-    setFeedback({
-      type: 'success',
-      message: 'Your enquiry passed demo validation. It was not sent or stored.',
-    });
+    setFeedback(null);
+    setIsSubmitting(true);
+
+    try {
+      const result = await submitFormspreeForm({
+        _subject: 'New enquiry from Next Level Gaming',
+        name: trimmedName,
+        email: trimmedEmail,
+        message: trimmedMessage,
+      });
+
+      if (!result.success) {
+        setFeedback({
+          type: 'error',
+          message:
+            result.reason === 'network'
+              ? 'Could not reach the enquiry form. Check your internet connection and try again.'
+              : `The enquiry form could not accept your message (HTTP ${result.statusCode}). Please try again or contact the arena.`,
+        });
+        return;
+      }
+
+      setFeedback({
+        type: 'success',
+        message: 'Your enquiry has been sent to the arena. They will follow up with you.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -104,9 +135,9 @@ export default function ContactScreen() {
         </View>
 
         <View style={styles.form}>
-          <Text style={styles.formTitle}>Prepare an enquiry</Text>
+          <Text style={styles.formTitle}>Send an enquiry</Text>
           <Text style={styles.formNote}>
-            Demo form only. Submitting validates the fields; it does not send or store a message.
+            Your name, email, and message will be sent to the arena via Formspree.
           </Text>
 
           <Text style={styles.label}>Full name</Text>
@@ -120,6 +151,7 @@ export default function ContactScreen() {
               setName(value);
               setFeedback(null);
             }}
+            editable={!isSubmitting}
             autoCapitalize="words"
             autoComplete="name"
             returnKeyType="next"
@@ -136,6 +168,7 @@ export default function ContactScreen() {
               setEmail(value);
               setFeedback(null);
             }}
+            editable={!isSubmitting}
             keyboardType="email-address"
             autoCapitalize="none"
             autoComplete="email"
@@ -154,6 +187,7 @@ export default function ContactScreen() {
               setMessage(value);
               setFeedback(null);
             }}
+            editable={!isSubmitting}
             multiline
             textAlignVertical="top"
             maxLength={1000}
@@ -171,7 +205,11 @@ export default function ContactScreen() {
               {feedback.message}
             </Text>
           )}
-          <ActionButton label="VALIDATE ENQUIRY (DEMO)" onPress={submitEnquiry} />
+          <ActionButton
+            label={isSubmitting ? 'SENDING ENQUIRY...' : 'SEND ENQUIRY'}
+            onPress={submitEnquiry}
+            disabled={isSubmitting}
+          />
         </View>
       </ScreenLayout>
     </KeyboardAvoidingView>
