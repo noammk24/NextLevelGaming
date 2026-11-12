@@ -9,7 +9,7 @@ export type FeeSummary = {
 };
 
 export function calculateFeeSummary(
-  selectedItems: readonly Pick<GamingExperience, 'priceAmount'>[],
+  selectedItems: readonly Pick<GamingExperience, 'priceAmount' | 'type'>[],
 ): FeeSummary {
   const bookingCount = selectedItems.length;
   const subtotal = selectedItems.reduce((total, item) => total + item.priceAmount, 0);
