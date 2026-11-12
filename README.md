@@ -9,7 +9,7 @@ A light-themed Expo/React Native app for exploring gaming packages, individual e
 - About, arena overview, and solo membership screens
 - Four-tab navigation: Home, Explore, Bookings, and More
 - Shared booking selection across screens, with add/remove/clear actions and an itemized fee summary
-- Contact form with client-side validation
+- Contact details with tap-to-call and email actions, an embedded Johannesburg Google Map, and client-side enquiry validation
 - Inter typography, accessible touch targets, safe-area-aware layouts, and loading/error states for remote images
 
 ## Prices and booking discounts
@@ -39,7 +39,8 @@ For example, one R1,500 package and two R750 experiences total R3,000 before dis
 
 - Confirmation is a demo estimate only. It does not reserve a session or process payment.
 - The contact form validates entered details locally; it does not send or store a message.
-- A city-level location is shown, but verified address, phone, email, opening hours, and directions were not provided. These values are kept configurable in `src/constants/contact.ts`.
+- The provided phone numbers and email are configurable in `src/constants/contact.ts`. A verified street address and opening hours were not provided.
+- The map is centered on Johannesburg because a precise venue address was not supplied; it should not be treated as the arena's verified location.
 - Membership benefits and player-development progression criteria were not provided and are not invented.
 - Gaming photography is loaded from Unsplash and requires an internet connection.
 
