@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from 'react-native';
+import { Link } from 'expo-router';
 import { ActionButton } from '@/components/ActionButton';
+import { ContactMap } from '@/components/ContactMap';
 import { ScreenLayout } from '@/components/ScreenLayout';
 import { SectionHeader } from '@/components/SectionHeader';
 import { CONTACT_DETAILS } from '@/constants/contact';
@@ -67,19 +70,37 @@ export default function ContactScreen() {
         </View>
         <View style={styles.infoCard}>
           <Text style={styles.infoTitle}>Contact details</Text>
-          <Text style={styles.infoText}>Phone: {CONTACT_DETAILS.phone ?? 'Not provided'}</Text>
-          <Text style={styles.infoText}>Email: {CONTACT_DETAILS.email ?? 'Not provided'}</Text>
+          <Text style={styles.infoText}>Phone</Text>
+          {CONTACT_DETAILS.phones.map((phone) => (
+            <Link key={phone} href={`tel:${phone.replace(/\s/g, '')}`} style={styles.contactLink}>
+              {phone}
+            </Link>
+          ))}
+          <Text style={[styles.infoText, styles.emailLabel]}>Email</Text>
+          <Link href={`mailto:${CONTACT_DETAILS.email}`} style={styles.contactLink}>
+            {CONTACT_DETAILS.email}
+          </Link>
         </View>
         <View style={styles.infoCard}>
-          <Text style={styles.infoTitle}>Opening hours and directions</Text>
+          <Text style={styles.infoTitle}>Opening hours</Text>
           <Text style={styles.infoText}>
             {CONTACT_DETAILS.openingHours ?? 'Opening hours have not been provided.'}
           </Text>
+        </View>
+        <View style={styles.infoCard}>
+          <Text style={styles.infoTitle}>Find us in Johannesburg</Text>
           <Text style={styles.infoText}>
-            {CONTACT_DETAILS.directionsUrl
-              ? 'Directions are available.'
-              : 'Directions cannot be shown until an exact address is confirmed.'}
+            This map points to Johannesburg generally; an exact arena address was not provided.
           </Text>
+          <ContactMap
+            title="Google map centered on Johannesburg, South Africa"
+            uri={CONTACT_DETAILS.mapEmbedUrl}
+          />
+          <Link href={CONTACT_DETAILS.mapUrl} asChild>
+            <Pressable accessibilityRole="link" style={styles.mapAction}>
+              <Text style={styles.mapActionText}>OPEN IN GOOGLE MAPS</Text>
+            </Pressable>
+          </Link>
         </View>
 
         <View style={styles.form}>
@@ -181,6 +202,32 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     fontFamily: FONT_FAMILY.regular,
     marginBottom: 4,
+  },
+  contactLink: {
+    color: COLORS.blue,
+    fontSize: 14,
+    lineHeight: 24,
+    fontFamily: FONT_FAMILY.semibold,
+    marginBottom: 4,
+  },
+  emailLabel: {
+    marginTop: SPACING.small,
+  },
+  mapAction: {
+    minHeight: 48,
+    marginTop: SPACING.medium,
+    paddingHorizontal: SPACING.medium,
+    borderRadius: RADIUS.pill,
+    borderWidth: 1,
+    borderColor: COLORS.cyan,
+    backgroundColor: COLORS.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  mapActionText: {
+    color: COLORS.blue,
+    fontSize: 14,
+    fontFamily: FONT_FAMILY.semibold,
   },
   form: {
     padding: SPACING.medium,
