@@ -1,325 +1,237 @@
-import React, { useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React from 'react';
 import { router } from 'expo-router';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { ActionButton } from '@/components/ActionButton';
-import { BrandHeader } from '@/components/BrandHeader';
-import {
-  GAMING_PACKAGES,
-  INDIVIDUAL_EXPERIENCES,
-} from '@/constants/experiences';
-import { calculateFeeSummary } from '@/constants/fees';
-import { COLORS, RADIUS, SPACING } from '@/constants/theme';
-
-const bookingOptions = [...GAMING_PACKAGES, ...INDIVIDUAL_EXPERIENCES];
-
-const formatPrice = (amount: number) =>
-  `R${amount.toLocaleString('en-ZA', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
+import { ScreenLayout } from '@/components/ScreenLayout';
+import { SectionHeader } from '@/components/SectionHeader';
+import { BOOKABLE_ITEMS } from '@/constants/experiences';
+import { formatZar } from '@/constants/fees';
+import { COLORS, FONT_FAMILY, RADIUS, SPACING } from '@/constants/theme';
+import { useBooking } from '@/state/BookingContext';
 
 export default function CalculateFeesScreen() {
-  const [selectedBookings, setSelectedBookings] = useState<string[]>([]);
-
-  const selectedItems = useMemo(
-    () => bookingOptions.filter((item) => selectedBookings.includes(item.id)),
-    [selectedBookings],
-  );
-  const { bookingCount, subtotal, discountRate, discountAmount, total } =
-    calculateFeeSummary(selectedItems);
-
-  const toggleBooking = (id: string) => {
-    setSelectedBookings((previous) =>
-      previous.includes(id)
-        ? previous.filter((bookingId) => bookingId !== id)
-        : [...previous, id],
-    );
-  };
+  const { selectedItems, summary, addItem, removeItem, clearItems } = useBooking();
+  const selectedIds = new Set(selectedItems.map((item) => item.id));
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.content}
-        keyboardShouldPersistTaps="handled">
-        <BrandHeader />
-        <View style={styles.hero}>
-          <Text style={styles.eyebrow}>PLAN YOUR SESSION</Text>
-          <Text style={styles.heroTitle}>CALCULATE FEES</Text>
-          <Text style={styles.heroSubtitle}>
-            Select experiences to see your subtotal, applicable discount and estimated total.
-          </Text>
-        </View>
+    <ScreenLayout showBack>
+      <SectionHeader
+        eyebrow="PLAN YOUR SESSION"
+        title="Calculate fees"
+        description="Select bookable items to see an itemized subtotal, discount, and estimated total."
+      />
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>SELECT EXPERIENCES</Text>
-          <Text style={styles.description}>
-            Select each package or activity once. You can change your selection at any time.
-          </Text>
+      <Text style={styles.helper}>
+        Each package or individual experience can be selected once. Memberships are excluded.
+      </Text>
 
-          {bookingOptions.map((item) => {
-            const isSelected = selectedBookings.includes(item.id);
+      {BOOKABLE_ITEMS.map((item) => {
+        const selected = selectedIds.has(item.id);
 
-            return (
-              <Pressable
-                key={item.id}
-                onPress={() => toggleBooking(item.id)}
-                accessibilityRole="checkbox"
-                accessibilityState={{ checked: isSelected }}
-                accessibilityLabel={`${item.title}, ${item.price}`}
-                style={[styles.bookingCard, isSelected && styles.selectedCard]}>
-                <Text style={[styles.checkbox, isSelected && styles.checkedBox]}>
-                  {isSelected ? '✓' : ''}
-                </Text>
-                <View style={styles.bookingInfo}>
-                  <Text style={styles.bookingName}>{item.title}</Text>
-                  <Text style={styles.bookingDescription}>{item.description}</Text>
-                </View>
-                <Text style={styles.bookingPrice}>{item.price}</Text>
-              </Pressable>
-            );
-          })}
-        </View>
-
-        <View
-          style={styles.summary}
-          accessible
-          accessibilityLabel={`Booking estimate. ${bookingCount} selected. Subtotal ${formatPrice(subtotal)}. Discount ${discountRate} percent, ${formatPrice(discountAmount)}. Estimated total ${formatPrice(total)}.`}>
-          <Text style={styles.summaryTitle}>YOUR ESTIMATE</Text>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Selected experiences</Text>
-            <Text style={styles.summaryValue}>{bookingCount}</Text>
-          </View>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Subtotal</Text>
-            <Text style={styles.summaryValue}>{formatPrice(subtotal)}</Text>
-          </View>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Discount ({discountRate}%)</Text>
-            <Text style={styles.discountValue}>−{formatPrice(discountAmount)}</Text>
-          </View>
-          <View style={styles.divider} />
-          <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>ESTIMATED TOTAL</Text>
-            <Text style={styles.totalValue}>{formatPrice(total)}</Text>
-          </View>
-          {selectedItems.length > 0 && (
-            <View style={styles.selectedList}>
-              {selectedItems.map((item) => (
-                <Text key={item.id} style={styles.selectedItem}>
-                  {item.title} · {item.price}
-                </Text>
-              ))}
+        return (
+          <Pressable
+            key={item.id}
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: selected }}
+            accessibilityLabel={`${item.title}, ${item.price}`}
+            onPress={() => (selected ? removeItem(item.id) : addItem(item.id))}
+            style={({ pressed }) => [styles.option, selected && styles.selectedOption, pressed && styles.pressed]}>
+            <View style={[styles.checkbox, selected && styles.checkedBox]}>
+              {selected && <Text style={styles.checkmark}>✓</Text>}
             </View>
-          )}
-          <Text style={styles.discountNote}>
-            One experience: no discount · Two: 5% · Three: 10% · More than three: 15%.
-            Discount is calculated on the selected subtotal.
-          </Text>
-          <ActionButton
-            label="CLEAR SELECTION"
-            variant="outline"
-            onPress={() => setSelectedBookings([])}
-          />
-        </View>
+            <View style={styles.optionText}>
+              <Text style={styles.optionTitle}>{item.title}</Text>
+              <Text style={styles.optionDescription}>{item.categoryLabel}</Text>
+              <Text style={styles.optionState}>{selected ? 'Added to booking' : 'Tap to add'}</Text>
+            </View>
+            <Text style={styles.optionPrice}>{item.price}</Text>
+          </Pressable>
+        );
+      })}
 
-        <View style={styles.footer}>
-          <Text style={styles.disclaimer}>
-            This is an estimate only, not a reservation or confirmed booking.
-          </Text>
-          <ActionButton
-            label="BACK TO EXPERIENCES"
-            onPress={() => router.push('/overview')}
-          />
-          <ActionButton
-            label="CONTACT US"
-            variant="outline"
-            onPress={() => router.push('/contact')}
-          />
+      <View style={styles.summary}>
+        <Text style={styles.summaryTitle}>ITEMIZED ESTIMATE</Text>
+        {selectedItems.length === 0 ? (
+          <Text style={styles.emptyText}>Select a package or activity to start your estimate.</Text>
+        ) : (
+          selectedItems.map((item) => (
+            <View key={item.id} style={styles.summaryRow}>
+              <Text style={styles.summaryLabel}>{item.title}</Text>
+              <Text style={styles.summaryValue}>{item.price}</Text>
+            </View>
+          ))
+        )}
+        <View style={styles.divider} />
+        <View style={styles.summaryRow}>
+          <Text style={styles.summaryLabel}>Subtotal</Text>
+          <Text style={styles.summaryValue}>{formatZar(summary.subtotal)}</Text>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+        <View style={styles.summaryRow}>
+          <Text style={styles.summaryLabel}>Discount ({summary.discountRate}%)</Text>
+          <Text style={styles.summaryValue}>−{formatZar(summary.discountAmount)}</Text>
+        </View>
+        <View style={styles.totalStrip}>
+          <Text style={styles.totalLabel}>ESTIMATED TOTAL</Text>
+          <Text style={styles.totalValue}>{formatZar(summary.total)}</Text>
+        </View>
+        <Text style={styles.discountNote}>
+          1 booking: 0% · 2: 5% · 3: 10% · More than 3: 15%. No taxes or extra charges are added.
+        </Text>
+      </View>
+
+      {selectedItems.length > 0 && (
+        <View style={styles.actions}>
+          <ActionButton label="VIEW BOOKING SUMMARY" onPress={() => router.push('/bookings')} />
+          <ActionButton label="CLEAR SELECTION" variant="outline" onPress={clearItems} />
+        </View>
+      )}
+    </ScreenLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  content: {
-    paddingBottom: SPACING.large,
-  },
-  hero: {
-    padding: SPACING.large,
-    backgroundColor: COLORS.cyan,
-  },
-  eyebrow: {
-    color: COLORS.blue,
-    fontSize: 11,
-    fontWeight: '900',
-    letterSpacing: 1.1,
-  },
-  heroTitle: {
-    color: COLORS.white,
-    fontSize: 30,
-    lineHeight: 36,
-    fontWeight: '900',
-    marginTop: SPACING.small,
-  },
-  heroSubtitle: {
-    color: COLORS.white,
-    fontSize: 15,
-    lineHeight: 22,
-    marginTop: SPACING.small,
-  },
-  section: {
-    padding: SPACING.medium,
-  },
-  sectionTitle: {
-    color: COLORS.green,
-    fontSize: 21,
-    fontWeight: '900',
-    marginBottom: SPACING.small,
-  },
-  description: {
-    color: COLORS.grey,
-    fontSize: 14,
-    lineHeight: 21,
+  helper: {
+    color: COLORS.mutedText,
+    fontSize: 13,
+    lineHeight: 20,
+    fontFamily: FONT_FAMILY.regular,
     marginBottom: SPACING.medium,
   },
-  bookingCard: {
+  option: {
+    minHeight: 76,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.card,
-    borderColor: COLORS.blue,
-    borderWidth: 1,
-    borderRadius: RADIUS.medium,
+    gap: SPACING.small,
     padding: SPACING.medium,
     marginBottom: SPACING.small,
+    borderRadius: RADIUS.medium,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.white,
   },
-  selectedCard: {
-    borderColor: COLORS.green,
+  selectedOption: {
+    borderColor: COLORS.blue,
+    backgroundColor: COLORS.paleBlue,
   },
   checkbox: {
     width: 24,
     height: 24,
-    borderRadius: 6,
     borderWidth: 2,
-    borderColor: COLORS.grey,
-    color: COLORS.blue,
-    textAlign: 'center',
-    lineHeight: 20,
-    paddingTop: 0,
-    marginRight: SPACING.small,
+    borderColor: COLORS.blue,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   checkedBox: {
-    backgroundColor: COLORS.green,
-    borderColor: COLORS.green,
+    backgroundColor: COLORS.blue,
   },
-  bookingInfo: {
-    flex: 1,
-    marginRight: SPACING.small,
-  },
-  bookingName: {
+  checkmark: {
     color: COLORS.white,
-    fontSize: 14,
-    fontWeight: '800',
+    fontSize: 15,
+    lineHeight: 18,
+    fontFamily: FONT_FAMILY.bold,
   },
-  bookingDescription: {
-    color: COLORS.grey,
+  optionText: {
+    flex: 1,
+    minWidth: 0,
+  },
+  optionTitle: {
+    color: COLORS.blue,
+    fontSize: 14,
+    fontFamily: FONT_FAMILY.bold,
+  },
+  optionDescription: {
+    color: COLORS.darkText,
     fontSize: 12,
-    lineHeight: 17,
-    marginTop: 4,
+    fontFamily: FONT_FAMILY.regular,
+    marginTop: 3,
   },
-  bookingPrice: {
-    color: COLORS.green,
-    fontSize: 14,
-    fontWeight: '800',
+  optionState: {
+    color: COLORS.mutedText,
+    fontSize: 11,
+    fontFamily: FONT_FAMILY.semibold,
+    marginTop: 3,
+  },
+  optionPrice: {
+    color: COLORS.blue,
+    fontSize: 13,
+    fontFamily: FONT_FAMILY.bold,
+  },
+  pressed: {
+    opacity: 0.75,
   },
   summary: {
-    marginHorizontal: SPACING.medium,
     padding: SPACING.medium,
-    backgroundColor: COLORS.blue,
+    marginTop: SPACING.medium,
     borderRadius: RADIUS.large,
+    backgroundColor: COLORS.white,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   summaryTitle: {
-    color: COLORS.green,
-    fontSize: 20,
-    fontWeight: '900',
+    color: COLORS.blue,
+    fontSize: 16,
+    fontFamily: FONT_FAMILY.bold,
     marginBottom: SPACING.medium,
+  },
+  emptyText: {
+    color: COLORS.mutedText,
+    fontSize: 14,
+    lineHeight: 21,
+    fontFamily: FONT_FAMILY.regular,
   },
   summaryRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
     gap: SPACING.small,
     marginBottom: SPACING.small,
   },
   summaryLabel: {
-    color: COLORS.grey,
+    flex: 1,
+    color: COLORS.darkText,
     fontSize: 14,
-    flexShrink: 1,
+    fontFamily: FONT_FAMILY.regular,
   },
   summaryValue: {
-    color: COLORS.white,
+    color: COLORS.blue,
     fontSize: 14,
-    fontWeight: '800',
-  },
-  discountValue: {
-    color: COLORS.green,
-    fontSize: 14,
-    fontWeight: '800',
+    fontFamily: FONT_FAMILY.semibold,
   },
   divider: {
     height: 1,
-    backgroundColor: COLORS.cyan,
+    backgroundColor: COLORS.border,
     marginVertical: SPACING.small,
   },
-  totalRow: {
+  totalStrip: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'space-between',
     gap: SPACING.small,
+    padding: SPACING.medium,
+    marginTop: SPACING.small,
+    borderRadius: RADIUS.medium,
+    backgroundColor: COLORS.paleGreen,
   },
   totalLabel: {
-    color: COLORS.white,
-    fontSize: 15,
-    fontWeight: '900',
-    flexShrink: 1,
+    flex: 1,
+    color: COLORS.blue,
+    fontSize: 13,
+    fontFamily: FONT_FAMILY.bold,
   },
   totalValue: {
-    color: COLORS.green,
-    fontSize: 21,
-    fontWeight: '900',
-  },
-  selectedList: {
-    borderTopWidth: 1,
-    borderTopColor: '#5346B2',
-    marginTop: SPACING.medium,
-    paddingTop: SPACING.small,
-  },
-  selectedItem: {
-    color: COLORS.white,
-    fontSize: 13,
-    lineHeight: 20,
+    color: COLORS.blue,
+    fontSize: 22,
+    fontFamily: FONT_FAMILY.extraBold,
   },
   discountNote: {
-    color: COLORS.grey,
+    color: COLORS.mutedText,
     fontSize: 12,
-    lineHeight: 18,
-    marginVertical: SPACING.medium,
-  },
-  footer: {
-    padding: SPACING.medium,
-    gap: SPACING.small,
-  },
-  disclaimer: {
-    color: COLORS.grey,
-    fontSize: 13,
     lineHeight: 19,
-    textAlign: 'center',
-    marginBottom: SPACING.small,
+    fontFamily: FONT_FAMILY.regular,
+    marginTop: SPACING.medium,
+  },
+  actions: {
+    gap: SPACING.small,
+    marginTop: SPACING.medium,
   },
 });

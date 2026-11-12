@@ -5,10 +5,14 @@ export const COLORS = {
   cyan: '#0499B1',
   grey: '#D9D9D9',
   white: '#FFFFFF',
-  lightGrey: '#F5F5F5',
+  lightGrey: '#F5FAFD',
   darkText: '#333333',
-  background: '#0B0B20',
-  card: '#151538',
+  mutedText: '#667085',
+  background: '#FFFFFF',
+  card: '#FFFFFF',
+  paleBlue: '#F5FAFD',
+  paleGreen: '#EDF8E8',
+  border: '#D9D9D9',
 };
 
 export const SPACING = {
@@ -19,10 +23,18 @@ export const SPACING = {
 };
 
 export const RADIUS = {
-  small: 10,
-  medium: 12,
+  small: 12,
+  medium: 14,
   large: 16,
+  pill: 24,
 };
+
+export const FONT_FAMILY = {
+  regular: 'Inter_400Regular',
+  semibold: 'Inter_600SemiBold',
+  bold: 'Inter_700Bold',
+  extraBold: 'Inter_800ExtraBold',
+} as const;
 
 export const Colors = {
   light: {
