@@ -2,32 +2,33 @@ import React, { useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
 import { ActionButton } from '@/components/ActionButton';
-import { BrandHeader } from '@/components/BrandHeader';
-import { COLORS, RADIUS, SPACING } from '@/constants/theme';
+import { ScreenLayout } from '@/components/ScreenLayout';
+import { SectionHeader } from '@/components/SectionHeader';
+import { CONTACT_DETAILS } from '@/constants/contact';
+import { COLORS, FONT_FAMILY, RADIUS, SPACING } from '@/constants/theme';
+
+type Feedback = {
+  type: 'error' | 'success';
+  message: string;
+};
 
 export default function ContactScreen() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const [feedback, setFeedback] = useState<{
-    type: 'error' | 'info';
-    message: string;
-  } | null>(null);
+  const [feedback, setFeedback] = useState<Feedback | null>(null);
 
-  const handleSubmit = () => {
+  const submitEnquiry = () => {
     if (!name.trim() || !email.trim() || !message.trim()) {
       setFeedback({
         type: 'error',
-        message: 'Please complete your name, email address and message.',
+        message: 'Please complete your name, email address, and message.',
       });
       return;
     }
@@ -41,212 +42,205 @@ export default function ContactScreen() {
     }
 
     setFeedback({
-      type: 'info',
-      message: 'Your details are valid. This project demo does not send or store messages.',
+      type: 'success',
+      message: 'Your enquiry passed demo validation. It was not sent or stored.',
     });
   };
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
-      <KeyboardAvoidingView
-        style={styles.safeArea}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.content}>
-          <BrandHeader />
-          <View style={styles.hero}>
-            <Text style={styles.eyebrow}>WE’RE HERE TO HELP</Text>
-            <Text style={styles.title}>CONTACT US</Text>
-            <Text style={styles.heroText}>
-              Have a question about an experience or group event? Prepare an enquiry below.
+    <KeyboardAvoidingView
+      style={styles.keyboard}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <ScreenLayout showBack keyboardShouldPersistTaps="handled">
+        <SectionHeader
+          eyebrow="CONTACT US"
+          title="Get in touch"
+          description="Ask about an experience or group event."
+        />
+
+        <View style={styles.infoCard}>
+          <Text style={styles.infoTitle}>Location</Text>
+          <Text style={styles.infoText}>{CONTACT_DETAILS.location}</Text>
+          <Text style={styles.infoText}>
+            Exact street address: {CONTACT_DETAILS.address ?? 'Not provided'}
+          </Text>
+        </View>
+        <View style={styles.infoCard}>
+          <Text style={styles.infoTitle}>Contact details</Text>
+          <Text style={styles.infoText}>Phone: {CONTACT_DETAILS.phone ?? 'Not provided'}</Text>
+          <Text style={styles.infoText}>Email: {CONTACT_DETAILS.email ?? 'Not provided'}</Text>
+        </View>
+        <View style={styles.infoCard}>
+          <Text style={styles.infoTitle}>Opening hours and directions</Text>
+          <Text style={styles.infoText}>
+            {CONTACT_DETAILS.openingHours ?? 'Opening hours have not been provided.'}
+          </Text>
+          <Text style={styles.infoText}>
+            {CONTACT_DETAILS.directionsUrl
+              ? 'Directions are available.'
+              : 'Directions cannot be shown until an exact address is confirmed.'}
+          </Text>
+        </View>
+
+        <View style={styles.form}>
+          <Text style={styles.formTitle}>Prepare an enquiry</Text>
+          <Text style={styles.formNote}>
+            Demo form only. Submitting validates the fields; it does not send or store a message.
+          </Text>
+
+          <Text style={styles.label}>Full name</Text>
+          <TextInput
+            accessibilityLabel="Full name"
+            style={styles.input}
+            placeholder="Enter your full name"
+            placeholderTextColor={COLORS.mutedText}
+            value={name}
+            onChangeText={(value) => {
+              setName(value);
+              setFeedback(null);
+            }}
+            autoCapitalize="words"
+            autoComplete="name"
+            returnKeyType="next"
+          />
+
+          <Text style={styles.label}>Email address</Text>
+          <TextInput
+            accessibilityLabel="Email address"
+            style={styles.input}
+            placeholder="Enter your email address"
+            placeholderTextColor={COLORS.mutedText}
+            value={email}
+            onChangeText={(value) => {
+              setEmail(value);
+              setFeedback(null);
+            }}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            autoCorrect={false}
+            returnKeyType="next"
+          />
+
+          <Text style={styles.label}>Message</Text>
+          <TextInput
+            accessibilityLabel="Enquiry message"
+            style={[styles.input, styles.messageInput]}
+            placeholder="How can we help?"
+            placeholderTextColor={COLORS.mutedText}
+            value={message}
+            onChangeText={(value) => {
+              setMessage(value);
+              setFeedback(null);
+            }}
+            multiline
+            textAlignVertical="top"
+            maxLength={1000}
+          />
+          <Text style={styles.characterCount}>{message.length}/1000</Text>
+          {feedback && (
+            <Text
+              accessibilityRole="alert"
+              accessibilityLiveRegion="polite"
+              style={[
+                styles.feedback,
+                feedback.type === 'error' ? styles.errorFeedback : styles.successFeedback,
+              ]}>
+              {feedback.type === 'error' ? '⚠ ' : '✓ '}
+              {feedback.message}
             </Text>
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>GET IN TOUCH</Text>
-            <Text style={styles.info}>Johannesburg, South Africa</Text>
-            <Text style={styles.info}>
-              Gaming, esports, parties, school outings and corporate events.
-            </Text>
-            <Text style={styles.formNote}>
-              Complete the form to validate your enquiry. This demo does not send or store messages.
-            </Text>
-
-            <Text style={styles.label}>Full name</Text>
-            <TextInput
-              accessibilityLabel="Full name"
-              style={styles.input}
-              placeholder="Enter your full name"
-              placeholderTextColor="#777777"
-              value={name}
-              onChangeText={(value) => {
-                setName(value);
-                setFeedback(null);
-              }}
-              autoCapitalize="words"
-              autoComplete="name"
-              returnKeyType="next"
-            />
-
-            <Text style={styles.label}>Email address</Text>
-            <TextInput
-              accessibilityLabel="Email address"
-              style={styles.input}
-              placeholder="Enter your email address"
-              placeholderTextColor="#777777"
-              value={email}
-              onChangeText={(value) => {
-                setEmail(value);
-                setFeedback(null);
-              }}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect={false}
-              returnKeyType="next"
-            />
-
-            <Text style={styles.label}>Message</Text>
-            <TextInput
-              accessibilityLabel="Enquiry message"
-              style={[styles.input, styles.messageInput]}
-              placeholder="How can we help?"
-              placeholderTextColor="#777777"
-              value={message}
-              onChangeText={(value) => {
-                setMessage(value);
-                setFeedback(null);
-              }}
-              multiline
-              textAlignVertical="top"
-              maxLength={1000}
-            />
-            <Text style={styles.characterCount}>{message.length}/1000</Text>
-            {feedback && (
-              <Text
-                accessibilityRole="alert"
-                style={[
-                  styles.feedback,
-                  feedback.type === 'error' ? styles.errorFeedback : styles.infoFeedback,
-                ]}>
-                {feedback.message}
-              </Text>
-            )}
-
-            <ActionButton label="VALIDATE ENQUIRY" onPress={handleSubmit} />
-            <View style={styles.secondaryAction}>
-              <ActionButton
-                label="VIEW EXPERIENCES"
-                variant="outline"
-                onPress={() => router.push('/overview')}
-              />
-            </View>
-            <View style={styles.secondaryAction}>
-              <ActionButton
-                label="BACK TO HOME"
-                variant="secondary"
-                onPress={() => router.push('/')}
-              />
-            </View>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+          )}
+          <ActionButton label="VALIDATE ENQUIRY (DEMO)" onPress={submitEnquiry} />
+        </View>
+      </ScreenLayout>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
+  keyboard: {
     flex: 1,
-    backgroundColor: COLORS.background,
   },
-  content: {
-    paddingBottom: SPACING.large,
-  },
-  hero: {
-    padding: SPACING.large,
-    backgroundColor: COLORS.cyan,
-  },
-  eyebrow: {
-    color: COLORS.blue,
-    fontSize: 11,
-    fontWeight: '900',
-    letterSpacing: 1,
-  },
-  title: {
-    color: COLORS.white,
-    fontSize: 32,
-    fontWeight: '900',
-    marginTop: SPACING.small,
-  },
-  heroText: {
-    color: COLORS.white,
-    fontSize: 15,
-    lineHeight: 23,
-    marginTop: SPACING.small,
-  },
-  section: {
+  infoCard: {
     padding: SPACING.medium,
+    marginBottom: SPACING.small,
+    borderRadius: RADIUS.medium,
+    backgroundColor: COLORS.white,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
-  sectionTitle: {
-    color: COLORS.green,
-    fontSize: 21,
-    fontWeight: '900',
+  infoTitle: {
+    color: COLORS.blue,
+    fontSize: 16,
+    fontFamily: FONT_FAMILY.bold,
     marginBottom: SPACING.small,
   },
-  info: {
-    color: COLORS.white,
+  infoText: {
+    color: COLORS.darkText,
     fontSize: 14,
     lineHeight: 21,
-    marginBottom: SPACING.small,
+    fontFamily: FONT_FAMILY.regular,
+    marginBottom: 4,
+  },
+  form: {
+    padding: SPACING.medium,
+    marginTop: SPACING.medium,
+    borderRadius: RADIUS.large,
+    backgroundColor: COLORS.paleBlue,
+  },
+  formTitle: {
+    color: COLORS.blue,
+    fontSize: 20,
+    fontFamily: FONT_FAMILY.bold,
   },
   formNote: {
-    color: COLORS.grey,
+    color: COLORS.mutedText,
     fontSize: 13,
-    lineHeight: 19,
-    backgroundColor: COLORS.card,
-    borderRadius: RADIUS.small,
-    padding: SPACING.medium,
-    marginVertical: SPACING.medium,
+    lineHeight: 20,
+    fontFamily: FONT_FAMILY.regular,
+    marginTop: SPACING.small,
+    marginBottom: SPACING.medium,
   },
   label: {
-    color: COLORS.white,
+    color: COLORS.blue,
     fontSize: 14,
-    fontWeight: '800',
+    fontFamily: FONT_FAMILY.semibold,
     marginBottom: SPACING.small,
   },
   input: {
-    backgroundColor: COLORS.white,
-    borderRadius: RADIUS.small,
-    padding: SPACING.medium,
-    fontSize: 15,
+    minHeight: 48,
+    paddingHorizontal: SPACING.medium,
+    paddingVertical: 12,
     marginBottom: SPACING.medium,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: RADIUS.small,
+    backgroundColor: COLORS.white,
     color: COLORS.darkText,
+    fontSize: 14,
+    fontFamily: FONT_FAMILY.regular,
   },
   messageInput: {
-    minHeight: 130,
+    minHeight: 132,
   },
   characterCount: {
-    alignSelf: 'flex-end',
-    color: COLORS.grey,
+    color: COLORS.mutedText,
     fontSize: 12,
+    fontFamily: FONT_FAMILY.regular,
+    textAlign: 'right',
     marginTop: -SPACING.small,
     marginBottom: SPACING.medium,
   },
   feedback: {
-    fontSize: 14,
+    fontSize: 13,
     lineHeight: 20,
+    fontFamily: FONT_FAMILY.semibold,
     marginBottom: SPACING.medium,
   },
   errorFeedback: {
-    color: COLORS.cyan,
+    color: COLORS.blue,
   },
-  infoFeedback: {
-    color: COLORS.green,
-  },
-  secondaryAction: {
-    marginTop: SPACING.small,
+  successFeedback: {
+    color: COLORS.blue,
   },
 });
