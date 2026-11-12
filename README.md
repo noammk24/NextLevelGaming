@@ -1,67 +1,101 @@
 # Next Level Gaming & Esports Arena
 
-A mobile application for Next Level Gaming & Esports Arena, a fictional gaming and esports venue in Johannesburg, South Africa. Customers can browse gaming packages and individual experiences, calculate booking fees with discounts, and get in touch with the arena.
-
-Built as a university group project.
+A light-themed Expo/React Native app for exploring gaming packages, individual experiences, memberships, and a demo booking flow. The project is built as a university group project.
 
 ## Features
 
-- Home screen with the arena's branding and package highlights
-- About Us screen with the arena's story and activities
-- Overview of four gaming packages (R1,500 each) and three individual experiences (R750 each)
-- Fee calculator with discounts: 5% for two bookings, 10% for three, 15% for more than three
-- Contact Us screen
+- Home screen with featured packages and popular experiences
+- Explore catalogue for four gaming packages and three individual experiences, with reusable detail screens
+- About, arena overview, and solo membership screens
+- Four-tab navigation: Home, Explore, Bookings, and More
+- Shared booking selection across screens, with add/remove/clear actions and an itemized fee summary
+- Contact form with client-side validation
+- Inter typography, accessible touch targets, safe-area-aware layouts, and loading/error states for remote images
 
-## Tech Stack
+## Prices and booking discounts
 
-- React Native
-- Expo (tested in Expo Go)
-- TypeScript
+All amounts are in South African Rand (ZAR).
+
+| Offer | Listed price |
+|---|---:|
+| Gaming packages | R1,500 each |
+| Individual experiences | R750 each |
+| Casual Pass | R150 / 3 hours |
+| Elite Member | R1,200 / month |
+| Pro Academy | R3,500 / month |
+
+Booking discounts apply to selected packages and individual experiences, not memberships:
+
+| Number of selected items | Discount |
+|---:|---:|
+| 1 | 0% |
+| 2 | 5% |
+| 3 | 10% |
+| More than 3 | 15% |
+
+For example, one R1,500 package and two R750 experiences total R3,000 before discount and R2,700 after the 10% discount. The calculator updates as items are added or removed.
+
+## Demo limitations and content
+
+- Confirmation is a demo estimate only. It does not reserve a session or process payment.
+- The contact form validates entered details locally; it does not send or store a message.
+- A city-level location is shown, but verified address, phone, email, opening hours, and directions were not provided. These values are kept configurable in `src/constants/contact.ts`.
+- Membership benefits and player-development progression criteria were not provided and are not invented.
+- Gaming photography is loaded from Unsplash and requires an internet connection.
+
+## Tech stack
+
+- Expo SDK 58, React Native, and TypeScript
 - Expo Router
+- Inter via `@expo-google-fonts/inter`
+- Node's built-in test runner for booking and pricing logic
 
-## Getting Started
+## Getting started
 
-1. Clone the repository and install dependencies:
+Install dependencies and start Expo:
 
 ```bash
-git clone [repository URL]
-cd NextLevelGaming
 npm install
-```
-
-2. Start the development server:
-
-```bash
 npx expo start
 ```
 
-3. Scan the QR code with Expo Go on your phone.
+Scan the QR code with Expo Go, or press `w` to open the web version.
 
-## Project Structure
+Run checks:
 
+```bash
+npm run lint
+npx tsc --noEmit
+npm test
 ```
-src/app/        Screens and navigation (Expo Router)
-components/     Reusable UI components
-constants/      Theme, package data and image config
-assets/images/  Logo and image assets
+
+## Project structure
+
+```text
+src/app/          Expo Router screens and tab navigation
+src/components/   Shared UI components
+src/constants/    Theme, offers, prices, and configurable contact details
+src/state/        Shared booking state and reducer
+tests/            Pricing and booking reducer tests
 ```
 
-## Brand Colours
+## Brand colours
 
-| Colour | Hex | Used for |
+| Colour | Hex | Usage |
 |---|---|---|
-| Deep blue | `#170398` | Headers, headings, professionalism |
-| Cyan / turquoise | `#0499B1` | Accents, innovation |
-| Bright green | `#5ACF29` | Buttons, energy and competition |
-| Light grey | `#D9D9D9` | Borders, backgrounds |
-| White | `#FFFFFF` | Readability |
+| Primary purple | `#170398` | Headings, navigation, and key totals |
+| Cyan | `#0499B1` | Accents and secondary actions |
+| Action green | `#5ACF29` | Primary actions and highlights |
+| Pale blue | `#F5FAFD` | Informational surfaces |
+| Border | `#D9D9D9` | Card outlines and dividers |
+| White | `#FFFFFF` | Main surfaces |
 
 ## Team
 
-| Member | student number |
+| Member | Student number |
 |---|---|
-| mulenga noam | ST10517736 |
-| Cain joseph | ST10541995  |
-| Neo sipho | ST10535603 |
-| umile mbombela  | ST10524342 |
+| Mulenga Noam | ST10517736 |
+| Cain Joseph | ST10541995 |
+| Neo Sipho | ST10535603 |
+| Umile Mbombela | ST10524342 |
 
